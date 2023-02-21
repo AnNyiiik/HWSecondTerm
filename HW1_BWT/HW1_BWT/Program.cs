@@ -6,6 +6,10 @@ namespace HW1_BWT
     {
         static void Main(string[] args)
         {
+            if (!Test.TestEncode())
+            {
+                return;
+            }
             string code = BWT.Encode("abracadabra");
             Console.WriteLine(code);
         }

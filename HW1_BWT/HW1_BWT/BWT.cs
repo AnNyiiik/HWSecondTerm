@@ -16,7 +16,7 @@ namespace HW1_BWT
             }
             InsertionSort(permutationsPositions, sequence);
             char[] decodedSequence = new char[sequence.Length];
-            for (int i = 0; i < sequence.Length; ++i) //проверить этот цикл
+            for (int i = 0; i < sequence.Length; ++i) 
             {
                 decodedSequence[i] = sequence[(sequence.Length - 1 + permutationsPositions[i]) % sequence.Length];
                 if (permutationsPositions[i] == 0)
@@ -33,7 +33,7 @@ namespace HW1_BWT
             
         }
         
-        static void InsertionSort(int[] array, string zeroPermutation) //проверить сортировку
+        static void InsertionSort(int[] array, string zeroPermutation) 
         {
             for (int i = 1; i < array.Length; i++)
             {
@@ -48,7 +48,7 @@ namespace HW1_BWT
             }
         }
 
-        public static bool ComparePermutations(int first, int second, string sequenceZero)
+        static bool ComparePermutations(int first, int second, string sequenceZero)
         {
             string firstPermutation = String.Concat(sequenceZero.Substring(first), 
                 sequenceZero.Substring(0, first));
