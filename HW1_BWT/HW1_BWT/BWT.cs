@@ -18,7 +18,7 @@ namespace HW1_BWT
             char[] decodedSequence = new char[sequence.Length];
             for (int i = 0; i < sequence.Length; ++i) //проверить этот цикл
             {
-                decodedSequence[i] = sequence[sequence.Length - 1 - permutationsPositions[i]];
+                decodedSequence[i] = sequence[(sequence.Length - 1 + permutationsPositions[i]) % sequence.Length];
                 if (permutationsPositions[i] == 0)
                 {
                     POSITION = i;
@@ -48,7 +48,7 @@ namespace HW1_BWT
             }
         }
 
-        static bool ComparePermutations(int first, int second, string sequenceZero)
+        public static bool ComparePermutations(int first, int second, string sequenceZero)
         {
             string firstPermutation = String.Concat(sequenceZero.Substring(first), 
                 sequenceZero.Substring(0, first));
