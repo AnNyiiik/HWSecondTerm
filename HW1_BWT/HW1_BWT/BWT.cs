@@ -9,6 +9,10 @@ namespace HW1_BWT
         
         public static string Encode(string sequence)
         {
+            if (sequence.Length <= 1)
+            {
+                return sequence;
+            }
             int[] permutationsPositions = new int[sequence.Length];
             for (int i = 0; i < sequence.Length; ++i)
             {
@@ -30,6 +34,10 @@ namespace HW1_BWT
 
         public static string Decode(string sequence)
         {
+            if (sequence.Length <= 1)
+            {
+                return sequence;
+            }
             int cardinality = GetCardinality(sequence);
             int[] firstPositionsOfSortedCharacters = new int[cardinality];
             char[] alphabet = new char[cardinality];
@@ -47,7 +55,7 @@ namespace HW1_BWT
             int[] vector = new int[sequence.Length];
             for (int i = 0; i < sequence.Length; ++i)
             {
-                int index = getAlphabetPosition(alphabet, sequence[i]);
+                int index = GetAlphabetPosition(alphabet, sequence[i]);
                 vector[firstPositionsOfSortedCharacters[index]] = i;
                 ++firstPositionsOfSortedCharacters[index];
             }
@@ -80,7 +88,7 @@ namespace HW1_BWT
             return cardinality;
         }
 
-        private static int getAlphabetPosition(char[] alphabet, char character)
+        private static int GetAlphabetPosition(char[] alphabet, char character)
         {
             for (int i = 0; i < alphabet.Length; ++i)
             {

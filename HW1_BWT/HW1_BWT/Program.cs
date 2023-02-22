@@ -6,8 +6,9 @@ namespace HW1_BWT
     {
         static void Main(string[] args)
         {
-            if (!Test.TestEncode())
+            if (!Test.TestBWT())
             {
+                Console.WriteLine("Tests have been failed");
                 return;
             }
             string code = BWT.Encode("banana");
