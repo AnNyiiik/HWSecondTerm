@@ -14,26 +14,111 @@ namespace HW1_BWT
             {
                 permutationsPositions[i] = i;
             }
-            InsertionSort(permutationsPositions, sequence);
-            char[] decodedSequence = new char[sequence.Length];
+            SortPermutations(permutationsPositions, sequence);
+            char[] encodedSequence = new char[sequence.Length];
             for (int i = 0; i < sequence.Length; ++i) 
             {
-                decodedSequence[i] = sequence[(sequence.Length - 1 + permutationsPositions[i]) % sequence.Length];
+                encodedSequence[i] = sequence[(sequence.Length - 1 + permutationsPositions[i]) % sequence.Length];
                 if (permutationsPositions[i] == 0)
                 {
                     POSITION = i;
                 }
             }
 
-            return String.Join("", decodedSequence);
+            return String.Join("", encodedSequence);
         }
 
-        public static void Decode(string sequence, int position)
+        public static string Decode(string sequence)
         {
-            
+            int cardinality = GetCardinality(sequence);
+            int[] firstPositionsOfSortedCharacters = new int[cardinality];
+            char[] alphabet = new char[cardinality];
+            GetAlphabeticFrequencySequence(sequence, firstPositionsOfSortedCharacters, alphabet);
+            char[] firstColum = new char[sequence.Length];
+            Array.Copy(sequence.ToCharArray(), firstColum, sequence.Length);
+            SortCharacters(firstColum);
+            int place = 0;
+            for (int i = 0; i < cardinality; ++i)
+            {
+                place += firstPositionsOfSortedCharacters[i];
+                firstPositionsOfSortedCharacters[i] = place - firstPositionsOfSortedCharacters[i];
+            }
+
+            int[] vector = new int[sequence.Length];
+            for (int i = 0; i < sequence.Length; ++i)
+            {
+                int index = getAlphabetPosition(alphabet, sequence[i]);
+                vector[firstPositionsOfSortedCharacters[index]] = i;
+                ++firstPositionsOfSortedCharacters[index];
+            }
+
+            int currentPosition = vector[POSITION];
+            char[] result = new char[sequence.Length];
+            for (int i = 0; i < sequence.Length; ++i)
+            {
+                result[i] = sequence[currentPosition];
+                currentPosition = vector[currentPosition];
+            }
+
+            return String.Join("", result);
+        }
+
+        private static int GetCardinality(string sequence)
+        {
+            char[] sorted = new char[sequence.Length];
+            Array.Copy(sequence.ToCharArray(), sorted, sequence.Length);
+            SortCharacters(sorted);
+            int cardinality = (sequence.Length > 0) ?  1 : 0;
+            for (int i = 0; i < sequence.Length - 1; ++i)
+            {
+                if (sorted[i] != sorted[i + 1])
+                {
+                    ++cardinality;
+                }
+            }
+
+            return cardinality;
+        }
+
+        private static int getAlphabetPosition(char[] alphabet, char character)
+        {
+            for (int i = 0; i < alphabet.Length; ++i)
+            {
+                if (alphabet[i] == character)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        private static void GetAlphabeticFrequencySequence(string sequence, int[] frequency, char[] alphabet)
+        {
+            int index = 0;
+            int count = 0; 
+            char[] sorted = new char[sequence.Length];
+            Array.Copy(sequence.ToCharArray(), sorted, sequence.Length);
+            SortCharacters(sorted);
+            for (int i = 0; i < sequence.Length - 1; ++i)
+            {
+                if (sorted[i] == sorted[i + 1])
+                {
+                    ++count;
+                }
+                else
+                {
+                    alphabet[index] = sorted[i];
+                    frequency[index] = count + 1;
+                    count = 0;
+                    ++index;
+                }
+            }
+            alphabet[index] = sorted[sequence.Length - 1];
+            frequency[index] = count + 1;
         }
         
-        static void InsertionSort(int[] array, string zeroPermutation) 
+        private static void SortPermutations(int[] array, string zeroPermutation) 
         {
             for (int i = 1; i < array.Length; i++)
             {
@@ -43,6 +128,19 @@ namespace HW1_BWT
                     array[index + 1] = array[index + 1] ^ array[index];
                     array[index] = array[index] ^ array[index + 1];
                     array[index + 1] = array[index + 1] ^ array[index];
+                    index--;
+                }
+            }
+        }
+
+        private static void SortCharacters(char[] array)
+        {
+            for (int i = 1; i < array.Length; i++)
+            {
+                int index = i - 1;
+                while(index >= 0 && array[index + 1] < array[index])
+                {
+                    (array[index + 1], array[index]) = (array[index], array[index + 1]);
                     index--;
                 }
             }

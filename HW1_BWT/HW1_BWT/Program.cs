@@ -10,8 +10,10 @@ namespace HW1_BWT
             {
                 return;
             }
-            string code = BWT.Encode("abracadabra");
+            string code = BWT.Encode("banana");
             Console.WriteLine(code);
+            string encoded = BWT.Decode(code);
+            Console.WriteLine(encoded);
         }
     }
 }
