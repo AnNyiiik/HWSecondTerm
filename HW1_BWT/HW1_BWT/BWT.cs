@@ -1,17 +1,14 @@
 using System;
-using System.Linq;
 
 namespace HW1_BWT
 {
-    public class BWT
+    public static class BWT
     {
-        private static int POSITION = 0;
-        
-        public static string Encode(string sequence)
+        public static Tuple<string, int> Encode(string sequence)
         {
             if (sequence.Length <= 1)
             {
-                return sequence;
+                return Tuple.Create(sequence, 0);
             }
             int[] permutationsPositions = new int[sequence.Length];
             for (int i = 0; i < sequence.Length; ++i)
@@ -20,19 +17,20 @@ namespace HW1_BWT
             }
             SortPermutations(permutationsPositions, sequence);
             char[] encodedSequence = new char[sequence.Length];
+            int position = 0;
             for (int i = 0; i < sequence.Length; ++i) 
             {
                 encodedSequence[i] = sequence[(sequence.Length - 1 + permutationsPositions[i]) % sequence.Length];
                 if (permutationsPositions[i] == 0)
                 {
-                    POSITION = i;
+                    position = i;
                 }
             }
 
-            return String.Join("", encodedSequence);
+            return Tuple.Create(new string(encodedSequence), position);
         }
 
-        public static string Decode(string sequence)
+        public static string Decode(string sequence, int position)
         {
             if (sequence.Length <= 1)
             {
@@ -60,7 +58,7 @@ namespace HW1_BWT
                 ++firstPositionsOfSortedCharacters[index];
             }
 
-            int currentPosition = vector[POSITION];
+            int currentPosition = vector[position];
             char[] result = new char[sequence.Length];
             for (int i = 0; i < sequence.Length; ++i)
             {
@@ -68,7 +66,7 @@ namespace HW1_BWT
                 currentPosition = vector[currentPosition];
             }
 
-            return String.Join("", result);
+            return new string(result);
         }
 
         private static int GetCardinality(string sequence)
@@ -133,9 +131,7 @@ namespace HW1_BWT
                 int index = i - 1;
                 while(index >= 0 && ComparePermutations(array[index + 1], array[index], zeroPermutation))
                 {
-                    array[index + 1] = array[index + 1] ^ array[index];
-                    array[index] = array[index] ^ array[index + 1];
-                    array[index + 1] = array[index + 1] ^ array[index];
+                    (array[index + 1], array[index]) = (array[index], array[index + 1]);
                     index--;
                 }
             }

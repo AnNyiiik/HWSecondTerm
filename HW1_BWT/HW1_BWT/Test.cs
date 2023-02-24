@@ -10,7 +10,7 @@ namespace HW1_BWT
             string[] correctAnswers = new[] { "rdarcaaaabb", "nnbaaa", "bcabaaa", ""};
             for (int i = 0; i < testCases.Length; ++i)
             {
-                if (String.Compare(BWT.Encode(testCases[i]), correctAnswers[i]) != 0)
+                if (String.Compare(BWT.Encode(testCases[i]).Item1, correctAnswers[i]) != 0)
                 {
                     return false;
                 }
@@ -22,10 +22,11 @@ namespace HW1_BWT
         private static bool TestDecode()
         {
             string[] testCases = new[] { "rdarcaaaabb", "bcabaaa"};
+            int[] position = new[] { 2, 2 };
             string[] correctAnswers = new[] { "abracadabra", "abacaba"};
             for (int i = 0; i < testCases.Length; ++i)
             {
-                if (String.Compare(BWT.Decode(testCases[i]), correctAnswers[i]) != 0)
+                if (String.Compare(BWT.Decode(testCases[i], position[i]), correctAnswers[i]) != 0)
                 {
                     return false;
                 }
