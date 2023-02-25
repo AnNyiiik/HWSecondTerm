@@ -8,9 +8,12 @@ namespace HW1_BWT
         {
             string[] testCases = new[] { "abracadabra", "banana", "abacaba", ""};
             string[] correctAnswers = new[] { "rdarcaaaabb", "nnbaaa", "bcabaaa", ""};
+            int[] correctPositions = new[] { 2, 3, 2, 0 };
             for (int i = 0; i < testCases.Length; ++i)
             {
-                if (String.Compare(BWT.Encode(testCases[i]).Item1, correctAnswers[i]) != 0)
+                Tuple<string, int> answer = BWT.Encode(testCases[i]);
+                if (String.Compare(answer.Item1, correctAnswers[i]) != 0 
+                    || correctPositions[i] != answer.Item2)
                 {
                     return false;
                 }
