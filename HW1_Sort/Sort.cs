@@ -9,9 +9,7 @@ namespace HW1_Sort
                 int index = i - 1;
                 while(index >= 0 && (array[index] > array[index + 1]))
                 {
-                    array[index + 1] = array[index + 1] ^ array[index];
-                    array[index] = array[index] ^ array[index + 1];
-                    array[index + 1] = array[index + 1] ^ array[index];
+                    (array[index + 1], array[index]) = (array[index], array[index + 1]);
                     index--;
                 }
             }
