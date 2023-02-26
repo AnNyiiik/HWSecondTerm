@@ -13,16 +13,31 @@ namespace HW1_Sort
                 return;
             }
             Console.WriteLine("Enter the size of the array:\n");
-            int size = Int32.Parse(Console.ReadLine());
+            int size = 0;
+            bool isCorrectData = Int32.TryParse(Console.ReadLine(), out size);
+            if (!isCorrectData)
+            {
+                Console.WriteLine("Not a number");
+                return;
+            } else if (size < 0)
+            {
+                Console.WriteLine("Invalid size value (should be non-negative)");
+                return;
+            }
             int[] array = new int[size];
             Console.WriteLine("Enter the numbers:\n");
             for (int i = 0; i < size; ++i)
             {
-                array[i] = Int32.Parse(Console.ReadLine());
+                isCorrectData =  Int32.TryParse(Console.ReadLine(), out array[i]);
+                if (!isCorrectData)
+                {
+                    Console.WriteLine("Not a number");
+                    return;
+                }
             }
             Sort.InsertionSort(array);
             string result = String.Join(", ", array);
-            Console.WriteLine(result);
+            Console.WriteLine("The sorted data via insertion sort : {0} ", result);
         }
     }
 }
