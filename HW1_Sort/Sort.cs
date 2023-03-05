@@ -1,19 +1,16 @@
-namespace HW1_Sort
+namespace HW1_Sort;
+public class Sort
 {
-    public class Sort
+    public static void InsertionSort(int[] array)
     {
-        public static void InsertionSort(int[] array)
+        for (var i = 1; i < array.Length; i++)
         {
-            for (int i = 1; i < array.Length; i++)
+            var index = i - 1;
+            while(index >= 0 && (array[index] > array[index + 1]))
             {
-                int index = i - 1;
-                while(index >= 0 && (array[index] > array[index + 1]))
-                {
-                    (array[index + 1], array[index]) = (array[index], array[index + 1]);
-                    index--;
-                }
+                (array[index + 1], array[index]) = (array[index], array[index + 1]);
+                index--;
             }
         }
-
     }
 }
