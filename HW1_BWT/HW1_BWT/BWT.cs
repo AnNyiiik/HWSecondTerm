@@ -9,14 +9,14 @@ public static class BWT {
             return Tuple.Create(sequence, 0);
         }
         var permutationsPositions = new int[sequence.Length];
-        for (int i = 0; i < sequence.Length; ++i)
+        for (var i = 0; i < sequence.Length; ++i)
         {
             permutationsPositions[i] = i;
         }
         SortPermutations(permutationsPositions, sequence);
         var encodedSequence = new char[sequence.Length];
         var position = 0;
-        for (int i = 0; i < sequence.Length; ++i) 
+        for (var i = 0; i < sequence.Length; ++i) 
         {
             encodedSequence[i] = sequence[(sequence.Length - 1 + permutationsPositions[i]) % sequence.Length];
             if (permutationsPositions[i] == 0)
@@ -40,23 +40,23 @@ public static class BWT {
         Array.Copy(sequence.ToCharArray(), firstColum, sequence.Length);
         SortCharacters(firstColum);
         var place = 0;
-        for (int i = 0; i < cardinality; ++i)
+        for (var i = 0; i < cardinality; ++i)
         {
             place += pair.Item1[i];
             pair.Item1[i] = place - pair.Item1[i];
         }
 
         var vector = new int[sequence.Length];
-        for (int i = 0; i < sequence.Length; ++i)
+        for (var i = 0; i < sequence.Length; ++i)
         {
-            int index = GetAlphabetPosition(pair.Item2, sequence[i]);
+            var index = GetAlphabetPosition(pair.Item2, sequence[i]);
             vector[pair.Item1[index]] = i;
             ++pair.Item1[index];
         }
 
         var currentPosition = vector[position];
         var result = new char[sequence.Length];
-        for (int i = 0; i < sequence.Length; ++i)
+        for (var i = 0; i < sequence.Length; ++i)
         {
             result[i] = sequence[currentPosition];
             currentPosition = vector[currentPosition];
@@ -71,7 +71,7 @@ public static class BWT {
         Array.Copy(sequence.ToCharArray(), sorted, sequence.Length);
         SortCharacters(sorted);
         var cardinality = (sequence.Length > 0) ?  1 : 0;
-        for (int i = 0; i < sequence.Length - 1; ++i)
+        for (var i = 0; i < sequence.Length - 1; ++i)
         {
             if (sorted[i] != sorted[i + 1])
             {
@@ -84,7 +84,7 @@ public static class BWT {
 
     private static int GetAlphabetPosition(char[] alphabet, char character)
     {
-        for (int i = 0; i < alphabet.Length; ++i)
+        for (var i = 0; i < alphabet.Length; ++i)
         {
             if (alphabet[i] == character)
             {
@@ -105,7 +105,7 @@ public static class BWT {
         var sorted = new char[sequence.Length];
         Array.Copy(sequence.ToCharArray(), sorted, sequence.Length);
         SortCharacters(sorted);
-        for (int i = 0; i < sequence.Length - 1; ++i)
+        for (var i = 0; i < sequence.Length - 1; ++i)
         {
             if (sorted[i] == sorted[i + 1])
             {
@@ -126,7 +126,7 @@ public static class BWT {
     
     private static void SortPermutations(int[] array, string zeroPermutation) 
     {
-        for (int i = 1; i < array.Length; i++)
+        for (var i = 1; i < array.Length; i++)
         {
             var index = i - 1;
             while(index >= 0 && ComparePermutations(array[index + 1], array[index], zeroPermutation))
@@ -139,7 +139,7 @@ public static class BWT {
 
     private static void SortCharacters(char[] array)
     {
-        for (int i = 1; i < array.Length; i++)
+        for (var i = 1; i < array.Length; i++)
         {
             var index = i - 1;
             while(index >= 0 && array[index + 1] < array[index])
