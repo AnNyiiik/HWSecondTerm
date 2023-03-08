@@ -31,17 +31,10 @@ public class Trie
         this.Root = new Vertex(0, false);
         this.SizeOfTrie = 0;
     }
-
     public int Size()
     {
-        return 0;
+        return this.SizeOfTrie;
     }
-
-    private void CountTerminalVertices(Vertex vertex)
-    {
-        
-    }
-
     private bool AddToVertex(Vertex vertex, string element, int position)
     {
         if (position == element.Length)
@@ -101,7 +94,31 @@ public class Trie
 
     public bool Contains(string element)
     {
+        var vertex = FindVertex(element);
+        if (vertex == null || !vertex.IsTerminal)
+        {
+            return false;
+        }
         return true;
+    }
+
+    private Vertex FindVertex(string element)
+    {
+        var position = 0;
+        var current = this.Root;
+        while (position < element.Length)
+        {
+            if (current.NextVertices.ContainsKey(element[position]))
+            {
+                current = current.NextVertices[element[position]];
+                ++position;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        return current;
     }
     
     private Tuple<bool, bool> RemoveFromVertex(Vertex vertex, string element, int position)
@@ -125,7 +142,8 @@ public class Trie
         {
             try
             {
-                var isdDeleted = RemoveFromVertex(vertex.NextVertices[element[position]], element, position + 1);
+                var isdDeleted = RemoveFromVertex(vertex.NextVertices[element[position]], 
+                        element, position + 1);
                 if (isdDeleted.Item1)
                 {
                     --vertex.NumberOfTerminalVertices;
@@ -161,9 +179,14 @@ public class Trie
         }
         return isDeleted.Item1;
     }
-
+    
     public int HowManyStartsWithPrefix(String prefix)
     {
+        var vertex = FindVertex(prefix);
+        if (FindVertex(prefix) != null)
+        {
+            return vertex.NumberOfTerminalVertices;
+        }
         return 0;
     }
 }
