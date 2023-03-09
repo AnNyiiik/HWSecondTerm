@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-
 namespace HW2_Bor;
 
 public class Trie
@@ -83,6 +80,10 @@ public class Trie
     
     public bool Add(string element)
     {
+        if (element.Length == 0)
+        {
+            return false;
+        }
         var isAdded =  AddToVertex(this.Root, element, 0);
         if (isAdded)
         {
@@ -94,6 +95,10 @@ public class Trie
 
     public bool Contains(string element)
     {
+        if (element.Length == 0)
+        {
+            return false;
+        }
         var vertex = FindVertex(element);
         if (vertex == null || !vertex.IsTerminal)
         {
@@ -172,6 +177,10 @@ public class Trie
 
     public bool Remove(string element)
     {
+        if (element.Length == 0)
+        {
+            return false;
+        }
         var isDeleted =  RemoveFromVertex(this.Root, element, 0);
         if (isDeleted.Item1)
         {
@@ -182,6 +191,10 @@ public class Trie
     
     public int HowManyStartsWithPrefix(String prefix)
     {
+        if (prefix.Length == 0)
+        {
+            return this.SizeOfTrie;
+        }
         var vertex = FindVertex(prefix);
         if (FindVertex(prefix) != null)
         {
