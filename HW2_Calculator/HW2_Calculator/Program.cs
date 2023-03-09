@@ -5,9 +5,36 @@
         Console.WriteLine("Test has been failed");
         return;
     }
-    
-    
-    var obj1 = new StackBasedOnList();
-    var obj2 = new StackCalculator((IStack) obj1);
-    var ret = obj2.Calculate("3 12 18 + /");
-    ret.ToString();
+    Console.WriteLine("To choose a stack based on array press 1\nTo choose a stack based on list press 2\n");
+    var isCorrect = Int32.TryParse(Console.ReadLine(), out var option);
+    if (!isCorrect)
+    {
+        Console.WriteLine("Not a number");
+        return;
+    }
+
+    if (option > 2 || option < 1)
+    {
+        Console.WriteLine("Not an option");
+        return;
+    }
+    StackCalculator calculator;
+    if (option == 1)
+    {
+        var stackArray = new StackBasedOnArray();
+        calculator = new StackCalculator((IStack)stackArray);
+    }
+    else
+    {
+        var stackList = new StackBasedOnList();
+        calculator = new StackCalculator((IStack)stackList);
+    }
+    Console.WriteLine("enter the expression to calculate:\n");
+    var expression = Console.ReadLine();
+    var result = calculator.Calculate(expression);
+    if (result.Item1 == false)
+    {
+        Console.WriteLine("An expression is incorrect");
+        return;
+    }
+    Console.WriteLine("A result is {0}", result.Item2);
