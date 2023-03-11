@@ -1,10 +1,8 @@
-using System;
-
 namespace HW2_Calculator;
 
 public class StackBasedOnArray : IStack
 {
-    private static double delta = 0.00001;
+    private static readonly double Delta = 0.00001;
     Tuple<bool, double> IStack.Calculate(string expression)
     {
         if (expression.Length == 0)
@@ -15,7 +13,7 @@ public class StackBasedOnArray : IStack
         var stack = Array.Empty<double>();
         foreach (var operand in parsedOperands)
         {
-            var isNumber = int.TryParse(operand.ToString(), out var number);
+            var isNumber = int.TryParse(operand, out var number);
             if (isNumber)
             {
                 var size = stack.GetLength(0);
@@ -47,7 +45,7 @@ public class StackBasedOnArray : IStack
                         stack[size - 2] = product;
                         break;
                     case "/":
-                        if (Math.Abs(stack[size - 1] - 0.0) < delta)
+                        if (Math.Abs(stack[size - 1] - 0.0) < Delta)
                         {
                             return new Tuple<bool, double>(false, 0);
                         }
@@ -65,6 +63,6 @@ public class StackBasedOnArray : IStack
         {
             return new Tuple<bool, double>(false, 0);
         }
-        return new Tuple<bool, double>(true, stack[0]);;
+        return new Tuple<bool, double>(true, stack[0]);
     }
 }

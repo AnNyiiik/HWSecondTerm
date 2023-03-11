@@ -22,16 +22,16 @@
     if (option == 1)
     {
         var stackArray = new StackBasedOnArray();
-        calculator = new StackCalculator((IStack)stackArray);
+        calculator = new StackCalculator(stackArray);
     }
     else
     {
         var stackList = new StackBasedOnList();
-        calculator = new StackCalculator((IStack)stackList);
+        calculator = new StackCalculator(stackList);
     }
     Console.WriteLine("enter the expression to calculate:\n");
     var expression = Console.ReadLine();
-    var result = calculator.Calculate(expression);
+    var result = (expression != null) ? calculator.Calculate(expression) : new Tuple<bool, double>(false, 0);
     if (result.Item1 == false)
     {
         Console.WriteLine("An expression is incorrect");

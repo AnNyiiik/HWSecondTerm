@@ -2,14 +2,14 @@ namespace HW2_Calculator;
 
 public class StackCalculator
 {
-    private IStack stack;
+    private readonly IStack _stack;
     public StackCalculator(IStack stack)
     {
-        this.stack = stack;
+        this._stack = stack;
     }
 
     public Tuple<bool, double> Calculate(string expression)
     {
-        return stack.Calculate(expression);
+        return _stack.Calculate(expression);
     }
 }
