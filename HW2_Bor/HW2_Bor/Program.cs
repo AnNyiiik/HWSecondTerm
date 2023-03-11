@@ -29,6 +29,11 @@ while (number != 0)
         case 1:
             Console.WriteLine("Enter a word:\n");
             var word = Console.ReadLine();
+            if (word == null)
+            {
+                Console.WriteLine("A null-reference");
+                return;
+            }
             var isAdded = trie.Add(word);
             if (isAdded)
             {
@@ -43,6 +48,11 @@ while (number != 0)
         case 2:
             Console.WriteLine("Enter a word:\n");
             word = Console.ReadLine();
+            if (word == null)
+            {
+                Console.WriteLine("A null-reference");
+                return;
+            }
             var isDeleted = trie.Remove(word);
             if (isDeleted)
             {
@@ -58,6 +68,11 @@ while (number != 0)
         case 3:
             Console.WriteLine("Enter a word:\n");
             word = Console.ReadLine();
+            if (word == null)
+            {
+                Console.WriteLine("A null-reference");
+                return;
+            }
             var isExists = trie.Contains(word);
             if (isExists)
             {
@@ -73,6 +88,11 @@ while (number != 0)
         case 4:
             Console.WriteLine("Enter a prefix:\n");
             word = Console.ReadLine();
+            if (word == null)
+            {
+                Console.WriteLine("A null-reference");
+                return;
+            }
             var count = trie.HowManyStartsWithPrefix(word);
             Console.WriteLine("{0} words start with {1}\n", count, word);
             break;

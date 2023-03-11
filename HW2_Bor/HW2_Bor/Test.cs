@@ -1,12 +1,9 @@
-using System;
-using System.Runtime.CompilerServices;
-
 namespace HW2_Bor;
 
 public static class Test
 {
-    private static string[] TestData =  { "abab", "babab", "aba", "absa", "babo"};
-    private static Trie MakeTrieFromTestData()
+    private static readonly string[] TestData =  { "abab", "babab", "aba", "absa", "babo"};
+    private static Trie? MakeTrieFromTestData()
     {
         var trie = new Trie();
         foreach (var word in TestData)
@@ -15,9 +12,9 @@ public static class Test
             {
                 trie.Add(word);
             }
-            catch (Exception e)
+            catch 
             {
-                throw e;
+                return null;
             }
         }
         return trie;
@@ -26,10 +23,6 @@ public static class Test
     private static bool TestAdd()
     {
         var trie = new Trie();
-        if (trie == null)
-        {
-            return false;
-        }
         foreach (var word in TestData)
         {
             try
@@ -52,6 +45,10 @@ public static class Test
     private static bool TestRemove()
     {
         var trie = MakeTrieFromTestData();
+        if (trie == null)
+        {
+            return false;
+        }
         foreach (var word in TestData)
         {
             try
@@ -73,6 +70,10 @@ public static class Test
     private static bool TestContains()
     {
         var trie = MakeTrieFromTestData();
+        if (trie == null)
+        {
+            return false;
+        }
         foreach (var word in TestData)
         {
             if (!trie.Contains(word))
@@ -87,6 +88,10 @@ public static class Test
     private static bool TestHowManyStartsWithPrefix()
     {
         var trie = MakeTrieFromTestData();
+        if (trie == null)
+        {
+            return false;
+        }
         Tuple<string, int>[] prefixes = { Tuple.Create("aba", 2), Tuple.Create("ab", 3), Tuple.Create("bab", 2) };
         foreach (var prefix in prefixes)
         {

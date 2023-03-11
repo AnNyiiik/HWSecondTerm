@@ -11,7 +11,7 @@ public class Trie
             this.NextVertices = new Dictionary<char, Vertex>();
         }
 
-        public Dictionary<Char, Vertex> NextVertices;
+        public Dictionary<char, Vertex> NextVertices;
 
         public int NumberOfTerminalVertices;
         
@@ -19,18 +19,18 @@ public class Trie
 
     }
 
-    private Vertex Root;
+    private readonly Vertex _root;
     
-    private int SizeOfTrie;
+    private int _sizeOfTrie;
 
     public Trie()
     {
-        this.Root = new Vertex(0, false);
-        this.SizeOfTrie = 0;
+        this._root = new Vertex(0, false);
+        this._sizeOfTrie = 0;
     }
     public int Size()
     {
-        return this.SizeOfTrie;
+        return this._sizeOfTrie;
     }
     private bool AddToVertex(Vertex vertex, string element, int position)
     {
@@ -84,10 +84,10 @@ public class Trie
         {
             return false;
         }
-        var isAdded =  AddToVertex(this.Root, element, 0);
+        var isAdded =  AddToVertex(this._root, element, 0);
         if (isAdded)
         {
-            ++this.SizeOfTrie;
+            ++this._sizeOfTrie;
         }
 
         return isAdded;
@@ -107,10 +107,10 @@ public class Trie
         return true;
     }
 
-    private Vertex FindVertex(string element)
+    private Vertex? FindVertex(string element)
     {
         var position = 0;
-        var current = this.Root;
+        var current = this._root;
         while (position < element.Length)
         {
             if (current.NextVertices.ContainsKey(element[position]))
@@ -181,10 +181,10 @@ public class Trie
         {
             return false;
         }
-        var isDeleted =  RemoveFromVertex(this.Root, element, 0);
+        var isDeleted =  RemoveFromVertex(this._root, element, 0);
         if (isDeleted.Item1)
         {
-            --this.SizeOfTrie;
+            --this._sizeOfTrie;
         }
         return isDeleted.Item1;
     }
@@ -193,7 +193,7 @@ public class Trie
     {
         if (prefix.Length == 0)
         {
-            return this.SizeOfTrie;
+            return _sizeOfTrie;
         }
         var vertex = FindVertex(prefix);
         if (FindVertex(prefix) != null)
