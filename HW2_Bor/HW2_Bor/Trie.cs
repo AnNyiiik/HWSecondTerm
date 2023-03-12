@@ -6,16 +6,33 @@ public class Trie
     {
         public Vertex(int numberOfTerminalVertices, bool isTerminal)
         {
-            this.NumberOfTerminalVertices = numberOfTerminalVertices;
-            this.IsTerminal = isTerminal;
-            this.NextVertices = new Dictionary<char, Vertex>();
+            this.numberOfTerminalVertices = numberOfTerminalVertices;
+            this.isTerminal = isTerminal;
+            this.nextVertices = new Dictionary<char, Vertex>();
         }
 
-        public Dictionary<char, Vertex> NextVertices;
+        private Dictionary<char, Vertex> nextVertices;
 
-        public int NumberOfTerminalVertices;
+        private int numberOfTerminalVertices;
         
-        public bool IsTerminal;
+        private bool isTerminal;
+
+        public Dictionary<char, Vertex> NextVertices
+        {
+            get => this.nextVertices;
+        }
+
+        public bool IsTerminal
+        {
+            get => isTerminal;
+            set => isTerminal = value;
+        }
+
+        public int NumberOfTerminalVertices
+        {
+            get => numberOfTerminalVertices;
+            set => numberOfTerminalVertices = value;
+        }
 
     }
 
@@ -28,10 +45,12 @@ public class Trie
         this._root = new Vertex(0, false);
         this._sizeOfTrie = 0;
     }
-    public int Size()
+    
+    public int Size
     {
-        return this._sizeOfTrie;
+        get => _sizeOfTrie; 
     }
+
     private bool AddToVertex(Vertex vertex, string element, int position)
     {
         if (position == element.Length)
@@ -78,9 +97,9 @@ public class Trie
         return true;
     }
     
-    public bool Add(string element)
+    public bool Add(string? element)
     {
-        if (element.Length == 0)
+        if (String.IsNullOrEmpty(element))
         {
             return false;
         }
@@ -93,9 +112,9 @@ public class Trie
         return isAdded;
     }
 
-    public bool Contains(string element)
+    public bool Contains(string? element)
     {
-        if (element.Length == 0)
+        if (String.IsNullOrEmpty(element))
         {
             return false;
         }
@@ -126,7 +145,10 @@ public class Trie
         return current;
     }
     
-    private Tuple<bool, bool> RemoveFromVertex(Vertex vertex, string element, int position)
+    ///<summary> Recursively checks if the given element exists in the tree. If it does, returns a pair of bool values: 1st - 
+    ///      true, 2nd - if there is no other elements after the current. If the second value is true, we can delete a
+    ///      branch. </summary>
+    private Tuple<bool, bool> RemoveWordFromVertex(Vertex vertex, string element, int position)
     {
         if (position == element.Length)
         {
@@ -145,46 +167,41 @@ public class Trie
         }
         if (vertex.NextVertices.ContainsKey(element[position]))
         {
-            try
+            
+            var isdDeleted = RemoveWordFromVertex(vertex.NextVertices[element[position]], 
+                    element, position + 1);
+            if (isdDeleted.Item1)
             {
-                var isdDeleted = RemoveFromVertex(vertex.NextVertices[element[position]], 
-                        element, position + 1);
-                if (isdDeleted.Item1)
+                --vertex.NumberOfTerminalVertices;
+                if (!isdDeleted.Item2)
                 {
-                    --vertex.NumberOfTerminalVertices;
-                    if (!isdDeleted.Item2)
-                    {
-                        return isdDeleted;
-                    }
-
-                    vertex.NextVertices.Remove(element[position]);
-                    if (vertex.NextVertices.Count != 0 || vertex.IsTerminal)
-                    {
-                        return new Tuple<bool, bool>(true, false);
-                    }
-                    return new Tuple<bool, bool>(true, true);
+                    return isdDeleted;
                 }
+
+                vertex.NextVertices.Remove(element[position]);
+                if (vertex.NextVertices.Count != 0 || vertex.IsTerminal)
+                {
+                    return new Tuple<bool, bool>(true, false);
+                }
+                return new Tuple<bool, bool>(true, true);
             }
-            catch
-            {
-                return new Tuple<bool, bool>(false, false);
-            }
+            
             return new Tuple<bool, bool>(false, false);
         }
         
         return new Tuple<bool, bool>(false, false);
     }
 
-    public bool Remove(string element)
+    public bool Remove(string? element)
     {
-        if (element.Length == 0)
+        if (String.IsNullOrEmpty(element))
         {
             return false;
         }
-        var isDeleted =  RemoveFromVertex(this._root, element, 0);
+        var isDeleted =  RemoveWordFromVertex(_root, element, 0);
         if (isDeleted.Item1)
         {
-            --this._sizeOfTrie;
+            --_sizeOfTrie;
         }
         return isDeleted.Item1;
     }
@@ -196,7 +213,7 @@ public class Trie
             return _sizeOfTrie;
         }
         var vertex = FindVertex(prefix);
-        if (FindVertex(prefix) != null)
+        if (vertex != null)
         {
             return vertex.NumberOfTerminalVertices;
         }
