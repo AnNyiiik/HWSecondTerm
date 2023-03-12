@@ -2,10 +2,10 @@ namespace HW2_Calculator;
 
 public static class Test
 {
-    private static readonly double Delta = 0.00001;
-    private static readonly string[] TestCasesTrue = new[] { "12 8 - 3 *", "-4 9 + 8 * 4 /" };
-    private static readonly double[] CorrectAnswers = new[] { 12.0, 10.0 };
-    private static readonly string[] TestCasesFalse = new[] { "", "10 8 - 0 /", "10 8 - 5", "+" };
+    private static readonly double delta = 0.00001;
+    private static readonly string[] TestCasesTrue = { "12 8 - 3 *", "-4 9 + 8 * 4 /" };
+    private static readonly double[] CorrectAnswers = { 12.0, 10.0 };
+    private static readonly string[] TestCasesFalse = { "", "10 8 - 0 /", "10 8 - 5", "+" };
 
     private static bool TestStack(IStack stackImplementation)
     {
@@ -17,11 +17,11 @@ public static class Test
             {
                 return false;
             }
-
-            if (Math.Abs(result.Item2 - CorrectAnswers[i]) > Delta)
+            if (Math.Abs((double)result.Item2 - CorrectAnswers[i]) > delta)
             {
                 return false;
             }
+            stack.Clear();
         }
 
         foreach (var expression in TestCasesFalse)
@@ -31,6 +31,7 @@ public static class Test
             {
                 return false;
             }
+            stack.Clear();
         }
         
         return true;

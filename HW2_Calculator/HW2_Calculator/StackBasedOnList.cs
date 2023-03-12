@@ -1,66 +1,76 @@
 namespace HW2_Calculator;
 
 public class StackBasedOnList : IStack
-{ 
-    private static readonly double Delta = 0.00001;
-    Tuple<bool, double> IStack.Calculate(string expression)
+{
+    private StackElement? head;
+
+    private List<StackElement> stack;
+
+    public int Size() => stack.Count;
+    
+    private class StackElement
     {
-        if (expression.Length == 0)
+        private double value;
+
+        private StackElement? next;
+        
+        public StackElement(double value)
         {
-            return new Tuple<bool, double>(false, 0);
-        }
-        var parsedOperands = expression.Split(' ');
-        var stack = new List<double>();
-        foreach (var operand in parsedOperands)
-        {
-            var isNumber = int.TryParse(operand, out var number);
-            if (isNumber)
-            {
-                stack.Add(number);
-            }
-            else
-            {
-                var size = stack.Count;
-                if (size < 2)
-                {
-                    return new Tuple<bool, double>(false, 0);
-                }
-                switch (operand)
-                {
-                    case "+":
-                        var sum = stack[size - 1] + stack[size - 2];
-                        stack.RemoveRange(size - 2, 2);
-                        stack.Add(sum);
-                        break;
-                    case "-":
-                        var difference = stack[size - 2] - stack[size - 1];
-                        stack.RemoveRange(size - 2, 2);
-                        stack.Add(difference);
-                        break;
-                    case "*":
-                        var product = stack[size - 1] * stack[size - 2];
-                        stack.RemoveRange(size - 2, 2);
-                        stack.Add(product);
-                        break;
-                    case "/":
-                        if (Math.Abs(stack[size - 1] - 0.0) < Delta)
-                        {
-                            return new Tuple<bool, double>(false, 0);
-                        }
-                        var quotient = stack[size - 2] / stack[size - 1];
-                        stack.RemoveRange(size - 2, 2);
-                        stack.Add(quotient);
-                        break;
-                    default:
-                        return new Tuple<bool, double>(false, 0);
-                }
-            }
+            this.next = null;
+            this.value = value;
         }
 
-        if (stack.Count != 1)
+        public StackElement(double value, StackElement? head)
         {
-            return new Tuple<bool, double>(false, 0);
+            this.next = head;
+            this.value = value;
         }
-        return new Tuple<bool, double>(true, stack[0]);
+
+        public double Value
+        {
+            get => value;
+        }
+
+        public StackElement? Next
+        {
+            get => next;
+        }
+    }
+
+    public StackBasedOnList()
+    {
+        stack = new List<StackElement>();
+    }
+    
+    public void Push(double element)
+    {
+        if (stack.Count == 0)
+        {
+            head = new StackElement(element);
+            stack.Add(this.head);
+            return;
+        }
+
+        head = new StackElement(element, this.head);
+        stack.Add(head);
+    }
+
+    public double? Pop()
+    {
+        if (stack.Count == 0)
+        {
+            return null;
+        }
+
+        var value = head?.Value;
+        head = head?.Next;
+        stack.RemoveRange(stack.Count - 1, 1);
+        return value;
+    }
+    
+    public void Clear()
+    {
+        stack = new List<StackElement>();
+        head = null;
     }
 }

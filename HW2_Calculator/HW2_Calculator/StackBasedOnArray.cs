@@ -2,67 +2,77 @@ namespace HW2_Calculator;
 
 public class StackBasedOnArray : IStack
 {
-    private static readonly double Delta = 0.00001;
-    Tuple<bool, double> IStack.Calculate(string expression)
+    private StackElement? head;
+
+    private StackElement[] stack;
+
+    public int Size() => stack.GetLength(0);
+
+    private class StackElement
     {
-        if (expression.Length == 0)
+        private double value;
+
+        private StackElement? next;
+        
+        public StackElement(double value)
         {
-            return new Tuple<bool, double>(false, 0);
-        }
-        var parsedOperands = expression.Split(' ');
-        var stack = Array.Empty<double>();
-        foreach (var operand in parsedOperands)
-        {
-            var isNumber = int.TryParse(operand, out var number);
-            if (isNumber)
-            {
-                var size = stack.GetLength(0);
-                Array.Resize(ref stack, size + 1);
-                stack[size] = number;
-            }
-            else
-            {
-                var size = stack.GetLength(0);
-                if (size < 2)
-                {
-                    return new Tuple<bool, double>(false, 0);
-                }
-                switch (operand)
-                {
-                    case "+":
-                        var sum = stack[size - 1] + stack[size - 2];
-                        Array.Resize(ref stack, size - 1);
-                        stack[size - 2] = sum;
-                        break;
-                    case "-":
-                        var difference = stack[size - 2] - stack[size - 1];
-                        Array.Resize(ref stack, size - 1);
-                        stack[size - 2] = difference;
-                        break;
-                    case "*":
-                        var product = stack[size - 1] * stack[size - 2];
-                        Array.Resize(ref stack, size - 1);
-                        stack[size - 2] = product;
-                        break;
-                    case "/":
-                        if (Math.Abs(stack[size - 1] - 0.0) < Delta)
-                        {
-                            return new Tuple<bool, double>(false, 0);
-                        }
-                        var quotient = stack[size - 2] / stack[size - 1];
-                        Array.Resize(ref stack, size - 1);
-                        stack[size - 2] = quotient;
-                        break;
-                    default:
-                        return new Tuple<bool, double>(false, 0);
-                }
-            }
+            this.next = null;
+            this.value = value;
         }
 
-        if (stack.GetLength(0) != 1)
+        public StackElement(double value, StackElement? head)
         {
-            return new Tuple<bool, double>(false, 0);
+            this.next = head;
+            this.value = value;
         }
-        return new Tuple<bool, double>(true, stack[0]);
+
+        public double Value
+        {
+            get => value;
+            set => this.value = value;
+        }
+
+        public StackElement? Next
+        {
+            get => next;
+        }
+    }
+
+    public StackBasedOnArray()
+    {
+        stack = Array.Empty<StackElement>();
+    }
+    
+    public void Push(double element)
+    {
+        var length = stack.GetLength(0);
+        if (length == 0)
+        {
+            head = new StackElement(element);
+            Array.Resize(ref stack, length + 1);
+            stack[length] = head;
+            return;
+        }
+        head = new StackElement(element, head);
+        Array.Resize(ref stack, length + 1);
+        stack[length] = head;
+    }
+
+    public double? Pop()
+    {
+        var length = stack.GetLength(0);
+        var value = head?.Value;
+        head = head == null ? head : head?.Next;
+        if (length > 0)
+        {
+            Array.Resize(ref stack, length - 1);
+        }
+        return value;
+    }
+
+    public void Clear()
+    {
+        stack = Array.Empty<StackElement>();
+        head = null;
     }
 }
