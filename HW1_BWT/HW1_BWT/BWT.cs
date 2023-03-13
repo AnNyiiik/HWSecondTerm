@@ -1,12 +1,19 @@
 using System;
 
 namespace HW1_BWT;
-public static class BWT {
-    public static Tuple<string, int> Encode(string sequence)
+
+public static class BWT 
+{
+    public static Tuple<bool, string?, int> Encode(string? sequence)
     {
-        if (sequence.Length <= 1)
+        if (String.IsNullOrEmpty(sequence))
         {
-            return Tuple.Create(sequence, 0);
+            return Tuple.Create(false, sequence, 0);
+        }
+
+        if (sequence.Length == 1)
+        {
+            return Tuple.Create(true, sequence, 0);
         }
         var permutationsPositions = new int[sequence.Length];
         for (var i = 0; i < sequence.Length; ++i)
@@ -25,14 +32,25 @@ public static class BWT {
             }
         }
 
-        return Tuple.Create(new string(encodedSequence), position);
+        return Tuple.Create(true, new string(encodedSequence), position);
     }
 
-    public static string Decode(string sequence, int position)
+    public static Tuple<bool, string> Decode(string? sequence, int position)
     {
-        if (sequence.Length <= 1)
+        
+        if (String.IsNullOrEmpty(sequence))
         {
-            return sequence;
+            return Tuple.Create(false, sequence);
+        }
+        
+        if (sequence.Length == 1)
+        {
+            return Tuple.Create(true, sequence);
+        }
+
+        if (position >= sequence.Length)
+        {
+            return Tuple.Create(false, sequence);
         }
         var cardinality = GetCardinality(sequence);
         var pair = GetAlphabeticFrequencySequence(sequence, cardinality); 
@@ -62,7 +80,7 @@ public static class BWT {
             currentPosition = vector[currentPosition];
         }
 
-        return new string(result);
+        return Tuple.Create(true, new string(result));
     }
 
     private static int GetCardinality(string sequence)
@@ -95,7 +113,8 @@ public static class BWT {
         return -1;
     }
 
-    // Returns a pair of int and char arrays: int array contains 1st positions of characters in the sorted sequence, char array contains the alphabet of the sequence.
+    // Returns a pair of int and char arrays: int array contains 1st positions of characters in the sorted sequence,
+    //      char array contains the alphabet of the sequence.
     private static Tuple<int[], char[]> GetAlphabeticFrequencySequence(string sequence, int cardinality)
     {
         var index = 0;
@@ -150,7 +169,7 @@ public static class BWT {
         }
     }
 
-    static bool ComparePermutations(int first, int second, string sequenceZero)
+    private static bool ComparePermutations(int first, int second, string sequenceZero)
     {
         var firstPermutation = String.Concat(sequenceZero.Substring(first), 
             sequenceZero.Substring(0, first));
