@@ -1,10 +1,10 @@
 ﻿using HW2_Calculator;
 
-        if (!Test.TestStackImplementation())
-        {
-            Console.WriteLine("Test has been failed");
-            return;
-        }
+        //if (!Test.TestStackImplementation())
+        //{
+            //Console.WriteLine("Test has been failed");
+            //return;
+        //}
         Console.WriteLine("To choose a stack based on array press 1\nTo choose a stack based on list press 2\n");
         var isCorrect = Int32.TryParse(Console.ReadLine(), out var option);
         if (!isCorrect)

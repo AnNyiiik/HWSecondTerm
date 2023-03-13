@@ -42,23 +42,23 @@ public class StackCalculator
                 {
                     case "+":
                         var sum = operandFirst + operandSecond;
-                        _stack.Push((int) sum);
+                        _stack.Push((double) sum);
                         break;
                     case "-":
                         var difference = operandSecond - operandFirst;
-                        _stack.Push((int) difference);
+                        _stack.Push((double) difference);
                         break;
                     case "*":
                         var product = operandFirst * operandSecond;
-                        _stack.Push((int) product);
+                        _stack.Push((double) product);
                         break;
                     case "/":
                         if (Math.Abs((int)operandFirst) < Delta)
                         {
                             return new Tuple<bool, double?>(false, null);
                         }
-                        var quotient = operandSecond / operandFirst;
-                        _stack.Push((int)quotient);
+                        var quotient = (double)operandSecond / operandFirst;
+                        _stack.Push((double) quotient);
                         break;
                     default:
                         return new Tuple<bool, double?>(false, null);

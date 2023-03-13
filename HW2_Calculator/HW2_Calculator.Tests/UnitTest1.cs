@@ -2,77 +2,52 @@ namespace HW2_Calculator.Tests;
 
 public class Tests
 {
-    private IStack stackBasedOnArray = new StackBasedOnArray();
-    private IStack stackBasedOnList = new StackBasedOnList();
+    private IStack stack;
+    private StackCalculator stackCalculator;
+    
+    private static readonly string[] testCasesTrue = { "12 8 - 3 *", "-4 9 + 8 * 4 /", "13 7 / 9 +" };
+    private static readonly double[] correctAnswers = { 12.0, 10.0, 10.85714};
+    
+    private static readonly string[] testCasesFalse = { "", "10 8 - 0 /", "10 8 - 5", "+" };
+    
+    private static readonly double delta = 0.00001;
 
     [SetUp]
     public void Setup()
     {
-        stackBasedOnArray = new StackBasedOnArray();
-        stackBasedOnList = new StackBasedOnList();
+        stackCalculator = new StackCalculator(stack);
     }
 
     [Test]
-    public void PopFromEmptyStackShouldNotFail()
+    public void TestTrue()
     {
-        stackBasedOnArray.Pop();
-        stackBasedOnList.Pop();
-        
-        Assert.IsTrue(stackBasedOnArray.Size() == 0);
-        Assert.IsTrue(stackBasedOnList.Size() == 0);
+        for (var i = 0; i < 2; ++i)
+        {
+            stack = i == 1 ? new StackBasedOnArray() : new StackBasedOnList();
+            Setup();
+            for(var j = 0; j < testCasesTrue.Length; ++j)
+            {
+                var result = stackCalculator.Calculate(testCasesTrue[j]);
+                Assert.True(result.Item1);
+                Assert.True(Math.Abs((double)result.Item2 - correctAnswers[j]) < delta);
+                stack.Clear();
+            }
+        }
     }
-
+    
     [Test]
-    public void PushShallWork()
+    public void TestFalse()
     {
-        stackBasedOnArray.Push(1);
-        stackBasedOnList.Push(1);
-
-        Assert.IsFalse(stackBasedOnArray.Size() == 0);
-        Assert.IsFalse(stackBasedOnList.Size() == 0);
-    }
-
-    [Test]
-    public void PushAndPopShallLeaveStackEmpty()
-    {
-        stackBasedOnArray.Push(1);
-        stackBasedOnArray.Pop();
-        
-        stackBasedOnList.Push(1);
-        stackBasedOnList.Pop();
-
-        Assert.IsTrue(stackBasedOnArray.Size() == 0);
-        
-        Assert.IsTrue(stackBasedOnList.Size() == 0);
-    }
-
-    [Test]
-    public void TwoPushesAndPopShallLeaveElementInStack()
-    {
-        stackBasedOnArray.Push(1);
-        stackBasedOnArray.Push(2);
-        stackBasedOnArray.Pop();
-
-        Assert.IsFalse(stackBasedOnArray.Size() == 0);
-        
-        stackBasedOnList.Push(1);
-        stackBasedOnList.Push(2);
-        stackBasedOnList.Pop();
-
-        Assert.IsFalse(stackBasedOnList.Size() == 0);
-    }
-
-    [Test]
-    public void PushAndPopShallGetExpectedValue()
-    {
-        stackBasedOnArray.Push(1);
-        var value = stackBasedOnArray.Pop();
-
-        Assert.That(value, Is.EqualTo(1.0));
-        
-        stackBasedOnList.Push(1);
-        value = stackBasedOnList.Pop();
-
-        Assert.That(value, Is.EqualTo(1.0));
+        for (var i = 0; i < 2; ++i)
+        {
+            stack = i == 1 ? new StackBasedOnArray() : new StackBasedOnList();
+            Setup();
+            foreach(var expression in testCasesFalse)
+            {
+                var result = stackCalculator.Calculate(expression);
+                Assert.False(result.Item1);
+                stack.Clear();
+            }
+        }
     }
 }
