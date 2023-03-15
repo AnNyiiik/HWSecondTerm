@@ -4,11 +4,12 @@ public class Trie
 {
     private class Vertex
     {
-        public Vertex(int numberOfTerminalVertices, bool isTerminal)
+        public Vertex(int numberOfTerminalVertices, bool isTerminal, int? code)
         {
             this.numberOfTerminalVertices = numberOfTerminalVertices;
             this.isTerminal = isTerminal;
             this.nextVertices = new Dictionary<char, Vertex>();
+            this.code = code;
         }
 
         private Dictionary<char, Vertex> nextVertices;
@@ -16,6 +17,8 @@ public class Trie
         private int numberOfTerminalVertices;
         
         private bool isTerminal;
+
+        private int? code;
 
         public Dictionary<char, Vertex> NextVertices
         {
@@ -34,6 +37,12 @@ public class Trie
             set => numberOfTerminalVertices = value;
         }
 
+        public int? Code
+        {
+            get => code;
+            set => code = value;
+        }
+
     }
 
     private readonly Vertex _root;
@@ -42,7 +51,7 @@ public class Trie
 
     public Trie()
     {
-        this._root = new Vertex(0, false);
+        this._root = new Vertex(0, false, null);
         this._sizeOfTrie = 0;
     }
     
@@ -61,6 +70,7 @@ public class Trie
             }
 
             vertex.IsTerminal = true;
+            vertex.Code = _sizeOfTrie;
             ++vertex.NumberOfTerminalVertices;
             return true;
         }
@@ -86,8 +96,8 @@ public class Trie
         var current = vertex;
         while (position < element.Length)
         {
-            var newVertex = (position == element.Length - 1) ? new Vertex(1, true) :
-                    new Vertex(1, false);
+            var newVertex = position == element.Length - 1 ? new Vertex(1, true, 
+                    _sizeOfTrie) : new Vertex(1, false, null);
             
             current.NextVertices.Add(element[position], newVertex);
             ++position;
@@ -103,10 +113,10 @@ public class Trie
         {
             return false;
         }
-        var isAdded =  AddToVertex(this._root, element, 0);
+        var isAdded =  AddToVertex(_root, element, 0);
         if (isAdded)
         {
-            ++this._sizeOfTrie;
+            ++_sizeOfTrie;
         }
 
         return isAdded;
@@ -124,6 +134,20 @@ public class Trie
             return false;
         }
         return true;
+    }
+
+    public int? GetCode(string? element)
+    {
+        if (String.IsNullOrEmpty(element))
+        {
+            return null;
+        }
+        var vertex = FindVertex(element);
+        if (vertex == null || !vertex.IsTerminal)
+        {
+            return null;
+        }
+        return vertex.Code;
     }
 
     private Vertex? FindVertex(string element)
