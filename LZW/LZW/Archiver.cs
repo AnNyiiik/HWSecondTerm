@@ -30,9 +30,8 @@ public class Archiver
                     var characterCode = (byte)fileReader.Read();
                     buffer.Add(characterCode);
                     var currentWord = Encoding.Default.GetString(buffer.ToArray());
-                    if (!alphabet.Contains(currentWord))
+                    if (alphabet.Add(currentWord))
                     {
-                        alphabet.Add(currentWord);
                         var code = alphabet.GetCode(currentWord.Substring(0,
                             currentWord.Length - 1));
                         if (code != null)
@@ -62,9 +61,12 @@ public class Archiver
                             if (code < 256)
                             {
                                 Console.WriteLine(BitConverter.ToString(new[] { bytes[0] }));
+                                fileStreamWriter.Write(bytes[0]);
                             } else if (code < 512)
                             {
                                 Console.WriteLine(BitConverter.ToString(new[] { bytes[1], bytes[0] }));
+                                fileStreamWriter.Write(bytes[1]);
+                                fileStreamWriter.Write(bytes[0]);
                             }
                         }
                     }

@@ -1,4 +1,4 @@
 ﻿using LZW;
 
-var dearchiver = new Dearchivator();
-dearchiver.UnzipFile("/Users/annnikolaeff/MyFolder/HWSecondTerm/LZW/LZW/NewFile1.zipped");
+var archiver = new Dearchivator();
+archiver.UnzipFile("/Users/annnikolaeff/MyFolder/HWSecondTerm/LZW/LZW/NewFile2.zipped");
