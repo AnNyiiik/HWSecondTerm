@@ -17,7 +17,7 @@ public class Dearchivator
     
     public bool UnzipFile(string path)
     {
-        var fileUnzipped = path.Substring(0, path.IndexOf('.')) + ".txt";
+        var fileUnzipped = path.Substring(0, path.IndexOf('.'));
         var bytes = File.ReadAllBytes(path);
         try
         {

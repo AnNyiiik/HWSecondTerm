@@ -1,1 +1,17 @@
-abacabadabacabae
+using System.Text;
+
+namespace LZW;
+
+public class Dearchivator
+{
+    private Dictionary<int, string> dictionary;
+
+    public Dearchivator()
+    {
+        dictionary = new Dictionary<int, string>();
+        for (byte i = 0; i < 255; ++i)
+        {
+            dictionary.Add(i, ((char)i).ToString());
+        }
+    }
+}

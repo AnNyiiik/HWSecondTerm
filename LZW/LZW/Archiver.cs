@@ -48,8 +48,6 @@ public class Archiver
                                     fileStreamWriter.Write(bytes[1]);
                                     fileStreamWriter.Write(bytes[0]);
                                 }
-
-                                Console.WriteLine(BitConverter.ToString(bytes));
                             }
 
                             buffer.Clear();
@@ -64,12 +62,10 @@ public class Archiver
                                 var bytes = BitConverter.GetBytes((int)code);
                                 if (code < 256)
                                 {
-                                    Console.WriteLine(BitConverter.ToString(new[] { bytes[0] }));
                                     fileStreamWriter.Write(bytes[0]);
                                 }
                                 else if (code < 512)
                                 {
-                                    Console.WriteLine(BitConverter.ToString(new[] { bytes[1], bytes[0] }));
                                     fileStreamWriter.Write(bytes[1]);
                                     fileStreamWriter.Write(bytes[0]);
                                 }
@@ -94,4 +90,4 @@ public class Archiver
 
         return true;
     }
-}
+} 
