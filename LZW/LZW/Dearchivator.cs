@@ -17,46 +17,57 @@ public class Dearchivator
         }
     }
     
-    public void UnzipFile(string path)
+    public bool UnzipFile(string path)
     {
         var fileUnzipped = path.Substring(0, path.IndexOf('.')) + ".txt";
         var bytes = File.ReadAllBytes(path);
-        using (var fileStreamWriter = new StreamWriter(File.Create(fileUnzipped), Encoding.ASCII))
+        try
         {
-            var numberOfCurrentByte = 0;
-            var currentWord = new StringBuilder();
-            var currentSequence = new StringBuilder();
-            while (numberOfCurrentByte < bytes.Length)
+            using (var fileStreamWriter = new StreamWriter(File.Create(fileUnzipped), Encoding.ASCII))
             {
-                if (numberOfCurrentByte < bytes.Length - 1 && dictionary.ContainsKey(256 * bytes[numberOfCurrentByte] 
-                        + bytes[numberOfCurrentByte + 1]))
+                var numberOfCurrentByte = 0;
+                var currentWord = new StringBuilder();
+                var currentSequence = new StringBuilder();
+                while (numberOfCurrentByte < bytes.Length)
                 {
-                    var code = 256 * bytes[numberOfCurrentByte]
-                              + bytes[numberOfCurrentByte + 1];
-                    currentSequence.Append(
-                        dictionary[code]);
-                    currentWord.Append(dictionary[code]
+                    if (numberOfCurrentByte < bytes.Length - 1 && dictionary.ContainsKey(
+                            256 * bytes[numberOfCurrentByte]
+                            + bytes[numberOfCurrentByte + 1]))
+                    {
+                        var code = 256 * bytes[numberOfCurrentByte]
+                                   + bytes[numberOfCurrentByte + 1];
+                        currentSequence.Append(
+                            dictionary[code]);
+                        currentWord.Append(dictionary[code]
                             .Substring(0, 1));
-                    fileStreamWriter.Write(dictionary[code]);
+                        fileStreamWriter.Write(dictionary[code]);
+                        ++numberOfCurrentByte;
+                    }
+                    else
+                    {
+                        fileStreamWriter.Write(dictionary[bytes[numberOfCurrentByte]]);
+                        currentWord.Append(dictionary[bytes[numberOfCurrentByte]].Substring(0, 1));
+                        currentSequence.Append(dictionary[bytes[numberOfCurrentByte]]);
+                    }
+
+                    if (!dictionary.ContainsValue(currentWord.ToString()))
+                    {
+                        var code = dictionary.Count;
+                        dictionary.Add(code, currentWord.ToString());
+                        currentWord.Clear();
+                        currentWord.Append(currentSequence);
+                    }
+
                     ++numberOfCurrentByte;
+                    currentSequence.Clear();
                 }
-                else
-                {
-                    fileStreamWriter.Write(dictionary[bytes[numberOfCurrentByte]]);
-                    currentWord.Append(dictionary[bytes[numberOfCurrentByte]].Substring(0, 1));
-                    currentSequence.Append(dictionary[bytes[numberOfCurrentByte]]);
-                }
-                if (!dictionary.ContainsValue(currentWord.ToString()))
-                {
-                    var code = dictionary.Count;
-                    dictionary.Add(code, currentWord.ToString());
-                    currentWord.Clear();
-                    currentWord.Append(currentSequence);
-                }
-                
-                ++numberOfCurrentByte;
-                currentSequence.Clear();
             }
         }
+        catch (ArgumentException e)
+        {
+            return false;
+        }
+
+        return true;
     }
 }

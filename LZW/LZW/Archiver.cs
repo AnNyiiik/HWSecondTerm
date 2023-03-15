@@ -17,61 +17,81 @@ public class Archiver
         }
     }
 
-    public void ArchiveFile(string path)
+    public bool ArchiveFile(string path)
     {
-        using (var fileReader = new StreamReader(path))
+        try
         {
-            var fileZipped = path.Substring(0, path.IndexOf('.')) + ".zipped";
-            var buffer = new List<byte>();
-            using (var fileStreamWriter = new BinaryWriter(File.Create(fileZipped), Encoding.ASCII))
+            using (var fileReader = new StreamReader(path))
             {
-                while (fileReader.Peek() >= 0)
+                var fileZipped = path.Substring(0, path.IndexOf('.')) + ".zipped";
+                var buffer = new List<byte>();
+                using (var fileStreamWriter = new BinaryWriter(File.Create(fileZipped), Encoding.ASCII))
                 {
-                    var characterCode = (byte)fileReader.Read();
-                    buffer.Add(characterCode);
-                    var currentWord = Encoding.Default.GetString(buffer.ToArray());
-                    if (alphabet.Add(currentWord))
+                    while (fileReader.Peek() >= 0)
                     {
-                        var code = alphabet.GetCode(currentWord.Substring(0,
-                            currentWord.Length - 1));
-                        if (code != null)
+                        var characterCode = (byte)fileReader.Read();
+                        buffer.Add(characterCode);
+                        var currentWord = Encoding.Default.GetString(buffer.ToArray());
+                        if (alphabet.Add(currentWord))
                         {
-                            var bytes = BitConverter.GetBytes((int)code);
-                            if (code < 256)
+                            var code = alphabet.GetCode(currentWord.Substring(0,
+                                currentWord.Length - 1));
+                            if (code != null)
                             {
-                                fileStreamWriter.Write(bytes[0]);
-                            } else 
-                            {
-                                fileStreamWriter.Write(bytes[1]);
-                                fileStreamWriter.Write(bytes[0]);
-                            } 
-                            Console.WriteLine(BitConverter.ToString(bytes));
+                                var bytes = BitConverter.GetBytes((int)code);
+                                if (code < 256)
+                                {
+                                    fileStreamWriter.Write(bytes[0]);
+                                }
+                                else
+                                {
+                                    fileStreamWriter.Write(bytes[1]);
+                                    fileStreamWriter.Write(bytes[0]);
+                                }
+
+                                Console.WriteLine(BitConverter.ToString(bytes));
+                            }
+
+                            buffer.Clear();
+                            buffer.Add(characterCode);
                         }
 
-                        buffer.Clear();
-                        buffer.Add(characterCode);
-                    }
-
-                    if (fileReader.Peek() < 0)
-                    {
-                        var code = alphabet.GetCode(Encoding.ASCII.GetString(buffer.ToArray()));
-                        if (code != null)
+                        if (fileReader.Peek() < 0)
                         {
-                            var bytes = BitConverter.GetBytes((int)code);
-                            if (code < 256)
+                            var code = alphabet.GetCode(Encoding.ASCII.GetString(buffer.ToArray()));
+                            if (code != null)
                             {
-                                Console.WriteLine(BitConverter.ToString(new[] { bytes[0] }));
-                                fileStreamWriter.Write(bytes[0]);
-                            } else if (code < 512)
-                            {
-                                Console.WriteLine(BitConverter.ToString(new[] { bytes[1], bytes[0] }));
-                                fileStreamWriter.Write(bytes[1]);
-                                fileStreamWriter.Write(bytes[0]);
+                                var bytes = BitConverter.GetBytes((int)code);
+                                if (code < 256)
+                                {
+                                    Console.WriteLine(BitConverter.ToString(new[] { bytes[0] }));
+                                    fileStreamWriter.Write(bytes[0]);
+                                }
+                                else if (code < 512)
+                                {
+                                    Console.WriteLine(BitConverter.ToString(new[] { bytes[1], bytes[0] }));
+                                    fileStreamWriter.Write(bytes[1]);
+                                    fileStreamWriter.Write(bytes[0]);
+                                }
                             }
                         }
                     }
                 }
             }
         }
+        catch (ArgumentException e1)
+        {
+            return false;
+        }
+        catch (FileNotFoundException e2)
+        {
+            return false;
+        }
+        catch (IOException e3)
+        {
+            return false;
+        }
+
+        return true;
     }
 }
