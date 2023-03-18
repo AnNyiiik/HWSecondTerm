@@ -11,4 +11,10 @@
       <ProjectReference Include="..\..\HW2_Bor\HW2_Bor\HW2_Bor.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="image" />
+      <None Remove="image.jpeg" />
+      <None Remove="image.zipped" />
+    </ItemGroup>
+
 </Project>

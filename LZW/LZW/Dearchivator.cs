@@ -9,7 +9,7 @@ public class Dearchivator
     public Dearchivator()
     {
         dictionary = new Dictionary<int, string>();
-        for (byte i = 0; i < 255; ++i)
+        for (int i = 0; i < 256; ++i)
         {
             dictionary.Add(i, ((char)i).ToString());
         }
@@ -18,48 +18,44 @@ public class Dearchivator
     public bool UnzipFile(string path)
     {
         var fileUnzipped = path.Substring(0, path.IndexOf('.'));
-        var bytes = File.ReadAllBytes(path);
         try
         {
-            using (var fileStreamWriter = new StreamWriter(File.Create(fileUnzipped), Encoding.ASCII))
+            using (var fileStreamWriter = new StreamWriter(File.Create(fileUnzipped), Encoding.UTF8))
             {
+                var bytes = File.ReadAllBytes(path);
                 var numberOfCurrentByte = 0;
                 var currentWord = new StringBuilder();
                 var currentSequence = new StringBuilder();
-                while (numberOfCurrentByte < bytes.Length)
+                while (numberOfCurrentByte < bytes.Length - 1)
                 {
-                    if (numberOfCurrentByte < bytes.Length - 1 && dictionary.ContainsKey(
-                            256 * bytes[numberOfCurrentByte]
-                            + bytes[numberOfCurrentByte + 1]))
+                    var code = 256 * bytes[numberOfCurrentByte]
+                               + bytes[numberOfCurrentByte + 1];
+                    
+                    if (!dictionary.ContainsKey(code))
                     {
-                        var code = 256 * bytes[numberOfCurrentByte]
-                                   + bytes[numberOfCurrentByte + 1];
-                        currentSequence.Append(
-                            dictionary[code]);
-                        currentWord.Append(dictionary[code]
-                            .Substring(0, 1));
+                        var newWord = currentWord.Append(currentWord.ToString().Substring(0, 1)).
+                                ToString();
+                        dictionary.Add(code, newWord);
+                        fileStreamWriter.Write(newWord);
+                    }
+                    else   
+                    {
+                        currentSequence.Append(dictionary[code]);
+                        currentWord.Append(dictionary[code].Substring(0, 1));
                         fileStreamWriter.Write(dictionary[code]);
-                        ++numberOfCurrentByte;
                     }
-                    else
-                    {
-                        fileStreamWriter.Write(dictionary[bytes[numberOfCurrentByte]]);
-                        currentWord.Append(dictionary[bytes[numberOfCurrentByte]].Substring(0, 1));
-                        currentSequence.Append(dictionary[bytes[numberOfCurrentByte]]);
-                    }
-
                     if (!dictionary.ContainsValue(currentWord.ToString()))
                     {
-                        var code = dictionary.Count;
+                        code = dictionary.Count;
                         dictionary.Add(code, currentWord.ToString());
                         currentWord.Clear();
                         currentWord.Append(currentSequence);
                     }
-
-                    ++numberOfCurrentByte;
+                    numberOfCurrentByte += 2;
                     currentSequence.Clear();
                 }
             }
+            
         }
         catch (ArgumentException e)
         {

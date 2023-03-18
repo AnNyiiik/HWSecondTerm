@@ -5,9 +5,9 @@ public static class Program
     public static void Main(string[] args)
     {
         var archiver = new Archiver();
-        archiver.ArchiveFile("/Users/annnikolaeff/MyFolder/HWSecondTerm/LZW/LZW/NewFile1.txt1");
+        archiver.ArchiveFile("/Users/annnikolaeff/MyFolder/HWSecondTerm/HW2_Bor/HW2_Bor/Trie.cs");
         var dearchiver = new Dearchivator();
-        dearchiver.UnzipFile("/Users/annnikolaeff/MyFolder/HWSecondTerm/LZW/LZW/NewFile1.zipped");
+        dearchiver.UnzipFile("/Users/annnikolaeff/MyFolder/HWSecondTerm/HW2_Bor/HW2_Bor/Trie.zipped");
         /* var arguments = Environment.GetCommandLineArgs();
         if (arguments.Length <= 1)
         {
