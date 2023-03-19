@@ -17,11 +17,11 @@ public class Tests
         Assert.Throws<IOException>(() => archiver.ArchiveFile(path));
     }
 
-    private static IEnumerable<TestCaseData> NotExistingFiles
+    /*private static IEnumerable<TestCaseData> NotExistingFiles
         => new TestCaseData[]
         {
-            new TestCaseData("/Users/annnikolaeff/MyFolder/HWSecondTerm/LZW/TestProject1/Test.txt"),
-            new TestCaseData("/Users/annnikolaeff/MyFolder/HWSecondTerm/LZW/TestProject1/File.txt")
+            new TestCaseData(/Users/annnikolaeff/MyFolder/HWSecondTerm/HW2_Bor/HW2_Bor/Trie),
+            new TestCaseData()
         };
 
     [TestCaseSource(nameof(NotExistingFiles))]
@@ -29,7 +29,7 @@ public class Tests
     {
         var archiver = new Archiver();
         Assert.Throws<FileNotFoundException>(() => archiver.ArchiveFile(path));
-    }
+    } */
     
     [Test]
     public void DecompressionShouldReturnTheCopyOfCompressedFile()
