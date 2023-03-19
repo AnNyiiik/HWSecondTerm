@@ -17,11 +17,11 @@ public class Tests
         Assert.Throws<IOException>(() => archiver.ArchiveFile(path));
     }
 
-    /*private static IEnumerable<TestCaseData> NotExistingFiles
+    private static IEnumerable<TestCaseData> NotExistingFiles
         => new TestCaseData[]
         {
-            new TestCaseData(/Users/annnikolaeff/MyFolder/HWSecondTerm/HW2_Bor/HW2_Bor/Trie),
-            new TestCaseData()
+            new TestCaseData("../../../../LZWTest/File1.txt"),
+            new TestCaseData("../../../../LZWTest/File2.txt")
         };
 
     [TestCaseSource(nameof(NotExistingFiles))]
@@ -29,18 +29,16 @@ public class Tests
     {
         var archiver = new Archiver();
         Assert.Throws<FileNotFoundException>(() => archiver.ArchiveFile(path));
-    } */
+    } 
     
     [Test]
     public void DecompressionShouldReturnTheCopyOfCompressedFile()
     {
-        var pathToArchive = "/Users/annnikolaeff/MyFolder/HWSecondTerm/HW2_Bor/HW2_Bor/Trie.cs";
-        var pathToDecompress = "/Users/annnikolaeff/MyFolder/HWSecondTerm/HW2_Bor/HW2_Bor/Trie" + ".zipped";
+        var pathToArchive = "../../../../LZWTest/TestData.txt";
         var archiver = new Archiver();
-        archiver.ArchiveFile(pathToArchive);
+        var pathZipped = archiver.ArchiveFile(pathToArchive);
         var dearchiver = new Dearchivator();
-        dearchiver.UnzipFile(pathToDecompress);
-        var pathUnzipped = "/Users/annnikolaeff/MyFolder/HWSecondTerm/HW2_Bor/HW2_Bor/Trie";
+        var pathUnzipped = dearchiver.UnzipFile(pathZipped);
         var stringsInput = File.ReadAllLines(pathToArchive);
         var stringsOut = File.ReadAllLines(pathUnzipped);
         Assert.That(stringsInput.Length, Is.EqualTo(stringsOut.Length));

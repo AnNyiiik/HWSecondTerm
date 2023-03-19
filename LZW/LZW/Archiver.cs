@@ -18,15 +18,16 @@ public class Archiver
         
     }
 
-    public void ArchiveFile(string path)
+    public string ArchiveFile(string path)
     {
         var countBytes = 0;
+        string fileZipped;
         try
         {
             using (var fileReader = new StreamReader(path))
             {
-                var fileZipped = path.Substring(0, path.IndexOf('.')) + ".zipped";
                 var buffer = new List<byte>();
+                fileZipped = path.Substring(0, path.LastIndexOf('.')) + ".zipped";
                 using (var fileStreamWriter = new BinaryWriter(File.Create(fileZipped), Encoding.UTF8))
                 {
                     while (fileReader.Peek() >= 0)
@@ -85,11 +86,6 @@ public class Archiver
         {
             using (var input = File.Open(path, FileMode.Open))
             {
-                if (input.Length == 0)
-                {
-                    Console.WriteLine("The file is empty, there is nothing to compress.");
-                }
-
                 if (countBytes == 0)
                 {
                     Console.WriteLine("Something went wrong.");
@@ -104,5 +100,7 @@ public class Archiver
         {
             throw new IOException();
         }
+
+        return fileZipped;
     }
 } 

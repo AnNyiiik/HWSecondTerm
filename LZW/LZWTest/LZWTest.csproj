@@ -22,4 +22,12 @@
       <ProjectReference Include="..\LZW\LZW.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <EmbeddedResource Remove="TestData.resx" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="TestData.Designer.cs" />
+    </ItemGroup>
+
 </Project>

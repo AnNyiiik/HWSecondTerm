@@ -15,9 +15,9 @@ public class Dearchivator
         }
     }
     
-    public bool UnzipFile(string path)
+    public string UnzipFile(string path)
     {
-        var fileUnzipped = path.Substring(0, path.IndexOf('.'));
+        var fileUnzipped = path.Substring(0, path.LastIndexOf('.'));
         try
         {
             using (var fileStreamWriter = new StreamWriter(File.Create(fileUnzipped), Encoding.UTF8))
@@ -59,9 +59,9 @@ public class Dearchivator
         }
         catch (ArgumentException e)
         {
-            return false;
+            throw new ArgumentException("IncorrectPath");
         }
 
-        return true;
+        return fileUnzipped;
     }
 }

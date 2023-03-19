@@ -15,6 +15,11 @@
       <None Remove="image" />
       <None Remove="image.jpeg" />
       <None Remove="image.zipped" />
+      <None Remove="NewFile2.zipped" />
+      <None Remove="NewFile2.txt" />
+      <None Remove="NewFile1.zipped" />
+      <None Remove="NewFile1.txt" />
+      <None Remove="NewFile1" />
     </ItemGroup>
 
 </Project>
