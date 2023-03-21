@@ -2,7 +2,7 @@ using System.Collections.Specialized;
 
 namespace UniqueList;
 
-public class UniqueList<T> : MyList<T>
+public class UniqueList<T> : MyList<T> where T : IComparable<T>
 {
     private Dictionary<T, bool> values;
 
@@ -30,7 +30,7 @@ public class UniqueList<T> : MyList<T>
 
     public void Change(T value, int position)
     {
-        if (values.ContainsKey(value))
+        if (values.ContainsKey(value) && GetFirstCoincide(value) != position)
         {
             throw new AddExistingElementToUniqueListException();
         }
