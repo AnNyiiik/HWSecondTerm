@@ -61,8 +61,12 @@ public class Operation
         }
     }
 
-    public Operand? DoOperation(Operand first, Operand second)
+    public Operand? DoOperation(Operand? first, Operand? second)
     {
+        if (first == null || second == null)
+        {
+            
+        }
         switch (operation)
         {
             case Operations.Add:

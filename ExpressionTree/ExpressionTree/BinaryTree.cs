@@ -95,7 +95,7 @@ public class BinaryExpressionTree
         }
     }
 
-    private Operand CountExpression()
+    private Operand? CountExpression()
     {
         if (rootOperation == null) {
             return rootOperand;
@@ -105,9 +105,9 @@ public class BinaryExpressionTree
         return rootOperation.DoOperation(operandFirst, operandSecond);
     }
 
-    public double Count()
+    public double? Count()
     {
-        return CountExpression().Value;
+        return CountExpression()?.Value;
     }
 
 }
