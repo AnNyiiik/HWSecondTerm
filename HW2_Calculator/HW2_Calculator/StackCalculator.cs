@@ -16,9 +16,9 @@ public class StackCalculator
         _stack.Clear();
     }
 
-    public Tuple<bool, double?> Calculate(string expression)
+    public Tuple<bool, double?> Calculate(string? expression)
     {
-        if (expression.Length == 0)
+        if (String.IsNullOrEmpty(expression))
         {
             return new Tuple<bool, double?>(false, null);
         }
@@ -34,10 +34,6 @@ public class StackCalculator
             {
                 var operandFirst = _stack.Pop();
                 var operandSecond = _stack.Pop();
-                if (operandFirst == null || operandSecond == null)
-                {
-                    return new Tuple<bool, double?>(false, null);
-                }
                 switch (operand)
                 {
                     case "+":
@@ -65,10 +61,12 @@ public class StackCalculator
                 }
             }
         }
-        if (_stack.Size() != 1)
+
+        var result = _stack.Pop();
+        if (!_stack.IsEmpty())
         {
             return new Tuple<bool, double?>(false, null);
         }
-        return new Tuple<bool, double?>(true, _stack.Pop());
+        return new Tuple<bool, double?>(true, result);
     }
 }
