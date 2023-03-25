@@ -4,16 +4,25 @@ namespace ExpressionTree;
 
 public class BinaryExpressionTree 
 {
-    private Operation? rootOperation;
+    private readonly Operation? rootOperation;
 
-    private Operand? rootOperand;
+    private readonly Operand? rootOperand;
 
-    private BinaryExpressionTree? leftTree;
+    private readonly BinaryExpressionTree? leftTree;
 
-    private BinaryExpressionTree? rightTree;
+    private readonly BinaryExpressionTree? rightTree;
 
-    public BinaryExpressionTree (string expression)
+    public BinaryExpressionTree (string? expression)
     {
+        if (expression == null)
+        {
+            throw new ArgumentNullException();
+        }  
+        if (expression.Length == 0)
+        {
+            throw new ArgumentException("operand is zero-length");
+        }
+        
         if (expression[0] != '(')
         {
             var isNumber = Int32.TryParse(expression, out var value);
@@ -21,10 +30,14 @@ public class BinaryExpressionTree
             {
                 rootOperand = new Operand(value);
             }
+            else
+            {
+                throw new ArgumentException("a subsequence which should be an operand is not a number");
+            }
         }
-        else
+        else if (expression[0] == '(')
         {
-            var operands = parseOperands(expression);
+            var operands = ParseOperands(expression);
             if (operands.Item1 != null)
             {
                 rootOperation = new Operation((Operation.Operations) operands.Item1);
@@ -32,22 +45,39 @@ public class BinaryExpressionTree
                 rightTree = new BinaryExpressionTree(operands.Item3);
             }
         }
+        else
+        {
+            throw new ArgumentException("incorrect expression");
+        }
     }
     
     private string ParseOperand(string expression, ref int index)
     {
+        if (expression.Length < index)
+        {
+            throw new ArgumentException("incorrect expression");
+        }
+
+        if (expression[2] != ' ')
+        {
+            throw new ArgumentException("incorrect expression");
+        }
         var character = expression[index];
         var operand = new StringBuilder();
         var start = index;
         if (character != '(') {
-            while (character != ' ' && character != ')') {
+            while (index < expression.Length && character != ' ' && character != ')') {
                 operand.Append(character);
                 ++index;
+                if (index == expression.Length)
+                {
+                    throw new ArgumentException("incorrect expression");
+                }
                 character = expression[index];
             }
         } else {
             var countBrackets = 1;
-            while (countBrackets != 0) {
+            while (index < expression.Length && countBrackets != 0) {
                 character = expression[index];
                 if (character == ')') {
                     --countBrackets;
@@ -57,40 +87,53 @@ public class BinaryExpressionTree
                 operand.Append(character);
                 ++index;
             }
+
+            if (countBrackets != 0)
+            {
+                throw new ArgumentException("incorrect expression");
+            }
         }
 
         return operand.ToString();
     }
 
-    private Tuple<Operation.Operations?, string, string> parseOperands(string expression)
+    private Tuple<Operation.Operations?, string, string> ParseOperands(string expression)
     {
         var operationType = Operation.GetOperationType(expression[1]);
+        if (operationType == null)
+        {
+            throw new ArgumentException("incorrect expression");
+        }
         var index = 3;
         var left = ParseOperand(expression, ref index);
         ++index;
         var right = ParseOperand(expression, ref index);
+        if (expression[index] != ')')
+        {
+            throw new ArgumentException("incorrect expression");
+        }
         return new Tuple<Operation.Operations?, string, string>(operationType, left, right);
     }
 
-    public void PrintExpression(bool isFirst)
+    public void PrintExpression(bool isFirst, ref StringBuilder result)
     {
         if (leftTree != null && rightTree != null) {
-            Console.Write("(");
-            rootOperation?.PrintOperation();
-            Console.Write(" ");
-            leftTree.PrintExpression(true);
-            rightTree.PrintExpression(false);
+            result.Append('(');
+            rootOperation?.PrintOperation(ref result);
+            result.Append(' ');
+            leftTree.PrintExpression(true, ref result);
+            rightTree.PrintExpression(false, ref result);
             if (isFirst) {
-                Console.Write(") ");
+                result.Append(") ");
             } else {
-                Console.Write(")");
+                result.Append(')');
             }
         } else {
             if (isFirst) {
-                rootOperand?.PrintOperand();
-                Console.Write(" ");
+                rootOperand?.PrintOperand(ref result);
+                result.Append(' ');
             } else {
-                rootOperand?.PrintOperand();
+                rootOperand?.PrintOperand(ref result);
             }
         }
     }
@@ -102,7 +145,12 @@ public class BinaryExpressionTree
         }
         var operandFirst = leftTree?.CountExpression();
         var operandSecond = rightTree?.CountExpression();
-        return rootOperation.DoOperation(operandFirst, operandSecond);
+        if (operandFirst != null && operandSecond != null)
+        {
+            return rootOperation.DoOperation(operandFirst, operandSecond);
+        }
+        
+        throw new ArgumentNullException();
     }
 
     public double? Count()

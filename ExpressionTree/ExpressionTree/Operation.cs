@@ -1,4 +1,6 @@
-﻿namespace ExpressionTree;
+﻿using System.Text;
+
+namespace ExpressionTree;
 
 public class Operation
 {
@@ -10,9 +12,9 @@ public class Operation
         Divide
     }
 
-    private string value;
+    private string? value;
 
-    public string Value
+    public string? Value
     {
         get => value;
         set => this.value = value;
@@ -36,6 +38,9 @@ public class Operation
                 break;
             case Operations.Divide:
                 value = "/";
+                break;
+            default:
+                value = null;
                 break;
         }
     }
@@ -61,12 +66,8 @@ public class Operation
         }
     }
 
-    public Operand? DoOperation(Operand? first, Operand? second)
+    public Operand? DoOperation(Operand first, Operand second)
     {
-        if (first == null || second == null)
-        {
-            
-        }
         switch (operation)
         {
             case Operations.Add:
@@ -86,8 +87,8 @@ public class Operation
         }
     }
 
-    public void PrintOperation()
+    public void PrintOperation(ref StringBuilder buffer)
     {
-        Console.Write(value);
+        buffer.Append(value);
     }
 }

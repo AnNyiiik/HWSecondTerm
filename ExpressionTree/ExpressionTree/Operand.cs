@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace ExpressionTree;
 
 public class Operand
@@ -15,8 +17,8 @@ public class Operand
         get => value;
     }
 
-    public void PrintOperand()
+    public void PrintOperand(ref StringBuilder buffer)
     {
-        Console.Write(value);
+        buffer.Append(value);
     }
 }
