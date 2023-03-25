@@ -9,7 +9,7 @@ public class Tests
     public void TestTrueCases()
     {
         var expressions = File.ReadAllLines("../../../../TestTree/TestTruth.txt");
-        var answers = File.ReadAllLines("../../../../TestTree/testTruthAnswers.txt");
+        var answers = File.ReadAllLines("../../../../TestTree/TestTruthAnswers.txt");
         var index = 0;
         foreach (var expression in expressions)
         {
