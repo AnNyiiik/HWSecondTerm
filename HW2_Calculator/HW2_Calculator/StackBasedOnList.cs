@@ -2,75 +2,35 @@ namespace HW2_Calculator;
 
 public class StackBasedOnList : IStack
 {
-    private StackElement? head;
-
-    private List<StackElement> stack;
-
-    public int Size() => stack.Count;
+    private List<double> stack;
     
-    private class StackElement
-    {
-        private double value;
-
-        private StackElement? next;
-        
-        public StackElement(double value)
-        {
-            next = null;
-            this.value = value;
-        }
-
-        public StackElement(double value, StackElement? head)
-        {
-            next = head;
-            this.value = value;
-        }
-
-        public double Value
-        {
-            get => value;
-        }
-
-        public StackElement? Next
-        {
-            get => next;
-        }
-    }
-
     public StackBasedOnList()
     {
-        stack = new List<StackElement>();
+        stack = new List<double>();
     }
     
     public void Push(double element)
     {
-        if (stack.Count == 0)
-        {
-            head = new StackElement(element);
-            stack.Add(this.head);
-            return;
-        }
-
-        head = new StackElement(element, this.head);
-        stack.Add(head);
+        stack.Add(element);
     }
 
-    public double? Pop()
+    public double Pop()
     {
-        if (stack.Count == 0)
+        if (IsEmpty())
         {
-            return null;
+            throw new AccessViolationException();
         }
 
-        var value = head?.Value;
-        head = head?.Next;
-        stack.RemoveRange(stack.Count - 1, 1);
+        var last = stack.Count - 1;
+        var value = stack[last];
+        stack.RemoveAt(stack.Count - 1);
         return value;
     }
-    
+
+    public bool IsEmpty() => stack.Count == 0;
+
     public void Clear()
     {
-        stack = new List<StackElement>();
-        head = null;
+        stack.Clear();
     }
 }

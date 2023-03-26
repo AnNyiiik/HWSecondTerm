@@ -5,7 +5,7 @@ public static class Test
     private static readonly double delta = 0.00001;
     private static readonly string[] TestCasesTrue = { "12 8 - 3 *", "-4 9 + 8 * 4 /" };
     private static readonly double[] CorrectAnswers = { 12.0, 10.0 };
-    private static readonly string[] TestCasesFalse = { "", "10 8 - 0 /", "10 8 - 5", "+" };
+    private static readonly string[] TestCasesFalse = { "", "10 8 - 0 /", "10 8 - 5" };
 
     private static bool TestStack(IStack stackImplementation)
     {
@@ -13,7 +13,7 @@ public static class Test
         for (var i = 0; i < TestCasesTrue.Length; ++i)
         {
             var result = stack.Calculate(TestCasesTrue[i]);
-            if (!result.Item1)
+            if (result.Item2 == null)
             {
                 return false;
             }

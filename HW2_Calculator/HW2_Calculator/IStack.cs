@@ -4,9 +4,9 @@ public interface IStack
 {
     public void Push(double value);
 
-    public double? Pop();
+    public double Pop();
 
-    public int Size();
+    public bool IsEmpty();
 
     public void Clear();
 }
