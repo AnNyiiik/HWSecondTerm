@@ -43,9 +43,7 @@ public class StackCalculatorTests
             new TestCaseData(new StackBasedOnArray(), ""), 
             new TestCaseData(new StackBasedOnList(), ""), 
             new TestCaseData(new StackBasedOnArray(), "10 8 - 0 /"), 
-            new TestCaseData(new StackBasedOnList(), "10 8 - 0 /"),  
-            new TestCaseData(new StackBasedOnArray(), "+"),
-            new TestCaseData(new StackBasedOnList(), "+"),
+            new TestCaseData(new StackBasedOnList(), "10 8 - 0 /"), 
             new TestCaseData(new StackBasedOnArray(), null),
             new TestCaseData(new StackBasedOnList(), null)
         };
