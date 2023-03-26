@@ -20,8 +20,8 @@ public class StackCalculatorTests
             new TestCaseData(new StackBasedOnList(), "0 -9 - 2 *", 18),
             new TestCaseData(new StackBasedOnArray(), "0 0 +", 0),
             new TestCaseData(new StackBasedOnList(), "0 0 +", 0), 
-            new TestCaseData(new StackBasedOnArray(), "3,3 -9,8 + 11,16 -", -17.66),
-            new TestCaseData(new StackBasedOnList(), "3,3 -9,8 + 11,16 -", -17.66)
+            new TestCaseData(new StackBasedOnArray(), "3.3 -9.8 + 11.16 -", -17.66),
+            new TestCaseData(new StackBasedOnList(), "3.3 -9.8 + 11.16 -", -17.66)
         };
     
     [TestCaseSource(nameof(TestCasesTrue))]
