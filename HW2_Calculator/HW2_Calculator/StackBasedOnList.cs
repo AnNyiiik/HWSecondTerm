@@ -16,13 +16,13 @@ public class StackBasedOnList : IStack
         
         public StackElement(double value)
         {
-            this.next = null;
+            next = null;
             this.value = value;
         }
 
         public StackElement(double value, StackElement? head)
         {
-            this.next = head;
+            next = head;
             this.value = value;
         }
 

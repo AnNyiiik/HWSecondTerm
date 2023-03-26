@@ -16,16 +16,16 @@ public class StackCalculator
         _stack.Clear();
     }
 
-    public Tuple<bool, double?> Calculate(string expression)
+    public Tuple<bool, double?> Calculate(string? expression)
     {
-        if (expression.Length == 0)
+        if (String.IsNullOrEmpty(expression))
         {
             return new Tuple<bool, double?>(false, null);
         }
         var parsedOperands = expression.Split();
         foreach (var operand in parsedOperands)
         {
-            var isNumber = int.TryParse(operand, out var number);
+            var isNumber = Double.TryParse(operand, out var number);
             if (isNumber)
             {
                 _stack.Push(number);
