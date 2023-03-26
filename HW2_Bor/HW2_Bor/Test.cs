@@ -3,19 +3,12 @@ namespace HW2_Bor;
 public static class Test
 {
     private static readonly string[] TestData =  { "abab", "babab", "aba", "absa", "babo"};
-    private static Trie? MakeTrieFromTestData()
+    private static Trie MakeTrieFromTestData()
     {
         var trie = new Trie();
         foreach (var word in TestData)
         {
-            try
-            {
-                trie.Add(word);
-            }
-            catch 
-            {
-                return null;
-            }
+            trie.Add(word);
         }
         return trie;
     }
@@ -25,15 +18,8 @@ public static class Test
         var trie = new Trie();
         foreach (var word in TestData)
         {
-            try
-            {
-                var isAdded = trie.Add(word);
-                if (!isAdded)
-                {
-                    return false;
-                }
-            }
-            catch 
+            var isAdded = trie.Add(word);
+            if (!isAdded)
             {
                 return false;
             }
@@ -45,21 +31,10 @@ public static class Test
     private static bool TestRemove()
     {
         var trie = MakeTrieFromTestData();
-        if (trie == null)
-        {
-            return false;
-        }
         foreach (var word in TestData)
         {
-            try
-            {
-                var isDeleted = trie.Remove(word);
-                if (!isDeleted)
-                {
-                    return false;
-                }
-            }
-            catch 
+            var isDeleted = trie.Remove(word);
+            if (!isDeleted)
             {
                 return false;
             }
@@ -70,10 +45,6 @@ public static class Test
     private static bool TestContains()
     {
         var trie = MakeTrieFromTestData();
-        if (trie == null)
-        {
-            return false;
-        }
         foreach (var word in TestData)
         {
             if (!trie.Contains(word))
@@ -88,10 +59,6 @@ public static class Test
     private static bool TestHowManyStartsWithPrefix()
     {
         var trie = MakeTrieFromTestData();
-        if (trie == null)
-        {
-            return false;
-        }
         Tuple<string, int>[] prefixes = { Tuple.Create("aba", 2), Tuple.Create("ab", 3), Tuple.Create("bab", 2) };
         foreach (var prefix in prefixes)
         {
