@@ -2,31 +2,31 @@ namespace HW2_Calculator;
 
 public class StackBasedOnArray : IStack
 {
-    private double[] stack;
+    private double[] _stack;
 
-    private int Capacity;
+    private int _capacity;
 
-    private int NumberOfElements;
+    private int _numberOfElements;
 
     public StackBasedOnArray()
     {
-        Capacity = 2;
-        stack = new double[2];
+        _capacity = 2;
+        _stack = new double[2];
     }
     
     public void Push(double element)
     {
-        if (NumberOfElements < Capacity)
+        if (_numberOfElements < _capacity)
         {
-            stack[NumberOfElements] = element;
-            ++NumberOfElements;
+            _stack[_numberOfElements] = element;
+            ++_numberOfElements;
         }
         else
         {
-            Array.Resize(ref stack, Capacity * 2);
-            Capacity *= 2;
-            stack[NumberOfElements] = element;
-            ++NumberOfElements;
+            Array.Resize(ref _stack, _capacity * 2);
+            _capacity *= 2;
+            _stack[_numberOfElements] = element;
+            ++_numberOfElements;
         }
     }
 
@@ -36,22 +36,22 @@ public class StackBasedOnArray : IStack
         {
             throw new AccessViolationException();
         }
-        var value = stack[NumberOfElements - 1];
-        if (NumberOfElements * 2 < Capacity && Capacity != 2)
+        var value = _stack[_numberOfElements - 1];
+        if (_numberOfElements * 2 < _capacity && _capacity != 2)
         {
-            Array.Resize(ref stack, Capacity / 2);
+            Array.Resize(ref _stack, _capacity / 2);
         }
 
-        --NumberOfElements;
+        --_numberOfElements;
         return value;
     }
     
-    public bool IsEmpty() => NumberOfElements == 0;
+    public bool IsEmpty() => _numberOfElements == 0;
 
     public void Clear()
     {
-        NumberOfElements = 0;
-        Capacity = 2;
-        stack = new double[2];
+        _numberOfElements = 0;
+        _capacity = 2;
+        _stack = new double[2];
     }
 }

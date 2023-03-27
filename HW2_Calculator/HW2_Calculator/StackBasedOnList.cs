@@ -2,16 +2,16 @@ namespace HW2_Calculator;
 
 public class StackBasedOnList : IStack
 {
-    private List<double> stack;
+    private readonly List<double> _stack;
     
     public StackBasedOnList()
     {
-        stack = new List<double>();
+        _stack = new List<double>();
     }
     
     public void Push(double element)
     {
-        stack.Add(element);
+        _stack.Add(element);
     }
 
     public double Pop()
@@ -21,16 +21,16 @@ public class StackBasedOnList : IStack
             throw new AccessViolationException();
         }
 
-        var last = stack.Count - 1;
-        var value = stack[last];
-        stack.RemoveAt(stack.Count - 1);
+        var last = _stack.Count - 1;
+        var value = _stack[last];
+        _stack.RemoveAt(_stack.Count - 1);
         return value;
     }
 
-    public bool IsEmpty() => stack.Count == 0;
+    public bool IsEmpty() => _stack.Count == 0;
 
     public void Clear()
     {
-        stack.Clear();
+        _stack.Clear();
     }
 }
