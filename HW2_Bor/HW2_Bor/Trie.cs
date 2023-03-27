@@ -35,11 +35,10 @@ public class Trie
     public Trie()
     {
         _root = new Vertex(0, false);
-        _sizeOfTrie = 0;
         Size = _sizeOfTrie;
     }
     
-    public int Size { get; }
+    public int Size { get; private set; }
 
     private bool AddToVertex(Vertex vertex, string element, int position)
     {
@@ -82,9 +81,9 @@ public class Trie
         return true;
     }
     
-    public bool Add(string? element)
+    public bool Add(string element)
     {
-        if (String.IsNullOrEmpty(element))
+        if (element.Length == 0)
         {
             return false;
         }
@@ -201,7 +200,7 @@ public class Trie
         }
         if (prefix.Length == 0)
         {
-            return _sizeOfTrie;
+            throw new ArgumentException();
         }
         var vertex = FindVertex(prefix);
         if (vertex != null)
