@@ -1,7 +1,4 @@
-﻿using System.Text;
-using System.Text.RegularExpressions;
-
-namespace HW5_Routers
+﻿namespace HW5_Routers
 {
     public class Program
     {
@@ -13,34 +10,19 @@ namespace HW5_Routers
                 return 1;
             } 
 
-            var pathInput = "/Users/annnikolaeff/MyFolder/HWSecondTerm/HW5_Routers/HW5_Routers/Scheme.txt";
-            string[] lines;
-            try
-            {
-                lines = File.ReadAllLines(pathInput);
-            }
-            catch (FileNotFoundException e1)
-            {
-                throw new FileNotFoundException();
-            }
-            catch (ArgumentNullException e2)
-            {
-                throw new ArgumentNullException();
-            }
-            catch (ArgumentException e3)
-            {
-                throw new ArgumentException();
-            }
-
+            var pathInput = args[0];
             Graph graph;
             try
             {
-                graph = FileHandler.BuildGraphFromData(lines);
+                graph = FileHandler.BuildGraphFromData(pathInput);
             }
-            catch (ArgumentException e)
+            catch (ArgumentException e1)
             {
-                Console.WriteLine("incorrect data format");
-                throw new ArgumentException("incorrect data format");
+                throw new ArgumentException("incorrect path or data format in file");
+            }
+            catch (FileNotFoundException e2)
+            {
+                throw new FileNotFoundException();
             }
 
             var result = graph.PrintMaxSpanningTree();

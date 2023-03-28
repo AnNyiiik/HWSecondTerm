@@ -5,11 +5,24 @@ namespace HW5_Routers;
 
 public static class FileHandler
 {
-    public static Graph BuildGraphFromData(string[]? lines)
+    public static Graph BuildGraphFromData(string path)
     {
+        string[] lines;
+        try
+        {
+            lines = File.ReadAllLines(path);
+        }
+        catch (FileNotFoundException e1)
+        {
+            throw new FileNotFoundException();
+        }
+        catch (ArgumentException e3)
+        {
+            throw new ArgumentException("Incorrect path");
+        }
         if (lines == null || lines.Length == 0)
         {
-            throw new ArgumentException();
+            throw new ArgumentException("empty file");
         }
         var regex = new Regex(@"^(\d+):(\s(\d+)\s\((\d+)\)(,))*(\s(\d+)\s\((\d+)\))");
         var graph = new Graph();
@@ -18,7 +31,7 @@ public static class FileHandler
             var isMatch = regex.IsMatch(line);
             if (!isMatch)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("incorrect data format");
             }
 
             var lineCopy = new StringBuilder(line);
@@ -30,7 +43,7 @@ public static class FileHandler
             var isNumber = Int32.TryParse(data[0], out var nodeFirst);
             if (!isNumber)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("incorrect data format");
             }
 
             var nodeSecond = 0; // иначе ругается, не могу не инициализировать, знаю что бесполезно :)
@@ -41,7 +54,7 @@ public static class FileHandler
                     isNumber = Int32.TryParse(data[i], out nodeSecond);
                     if (!isNumber)
                     {
-                        throw new ArgumentException();
+                        throw new ArgumentException("incorrect data format");
                     }
                 }
                 else
@@ -49,7 +62,7 @@ public static class FileHandler
                     isNumber = Int32.TryParse(data[i], out var weight);
                     if (!isNumber)
                     {
-                        throw new ArgumentException();
+                        throw new ArgumentException("incorrect data format");
                     }
 
                     graph.AddEdge(nodeFirst, nodeSecond, weight);

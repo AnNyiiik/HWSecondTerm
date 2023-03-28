@@ -26,7 +26,7 @@ public class Graph
         public int Weight { get; }
     }
     
-    private List<Edge> _edges;
+    private readonly List<Edge> _edges;
     public Graph()
     {
         _edges = new List<Edge>();
@@ -53,8 +53,8 @@ public class Graph
     
     private class Set
     {
-        private Graph _set;
-        private List<int> _nodes;
+        private readonly Graph _set;
+        private readonly List<int> _nodes;
 
         public Graph GetSet { get; }
 
@@ -91,7 +91,7 @@ public class Graph
         
     }
     
-    private List<Set> _sets;
+    private readonly List<Set> _sets;
     
     private Set? Find(int node)
     {
