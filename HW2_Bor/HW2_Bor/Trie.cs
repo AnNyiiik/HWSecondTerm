@@ -129,53 +129,45 @@ public class Trie
         return current;
     }
     
-    ///<summary>
-    /// Recursively checks if the given element exists in the tree. If it does, returns a pair of bool values: 1st - 
-    /// true, 2nd - if there is no other elements after the current. If the second value is true, we can delete a
-    /// branch.
-    /// </summary>
-    private (bool isWordDeleted, bool isBranchToDelete) RemoveWordFromVertex(Vertex vertex, string element, int position)
+    private bool RemoveWordFromVertex(Vertex vertex, string element, int position)
     {
         if (position == element.Length)
         {
             if (!vertex.IsTerminal)
             {
-                return (false, false);
+                return false;
             }
 
             vertex.IsTerminal = false;
             --vertex.NumberOfTerminalVertices;
-            if (vertex.NextVertices.Count == 0)
-            {
-                return (true, true);
-            }
-            return (true, false);
+            
+            return true;
         }
         if (vertex.NextVertices.ContainsKey(element[position]))
         {
             
             var resultOfDeletion = RemoveWordFromVertex(vertex.NextVertices[element[position]], 
                     element, position + 1);
-            if (resultOfDeletion.isWordDeleted)
+            if (resultOfDeletion)
             {
                 --vertex.NumberOfTerminalVertices;
-                if (!resultOfDeletion.isBranchToDelete)
-                {
-                    return resultOfDeletion;
-                }
-
-                vertex.NextVertices.Remove(element[position]);
-                if (vertex.NextVertices.Count != 0 || vertex.IsTerminal)
-                {
-                    return (true, false);
-                }
-                return (true, true);
+                DeleteBranch(ref vertex, element[position]);
+                return true;
             }
             
-            return (false, false);
+            return false;
         }
         
-        return (false, false);
+        return false;
+    }
+
+    private void DeleteBranch(ref Vertex vertexParent, char childKey)
+    {
+        var vertexChild = vertexParent.NextVertices[childKey];
+        if (vertexChild.NextVertices.Count == 0 && !vertexChild.IsTerminal)
+        {
+            vertexParent.NextVertices.Remove(childKey);
+        }
     }
 
     public bool Remove(string element)
@@ -185,11 +177,11 @@ public class Trie
             return false;
         }
         var isDeleted =  RemoveWordFromVertex(_root, element, 0);
-        if (isDeleted.Item1)
+        if (isDeleted)
         {
             --_sizeOfTrie;
         }
-        return isDeleted.Item1;
+        return isDeleted;
     }
     
     public int HowManyStartsWithPrefix(String? prefix)
