@@ -36,7 +36,7 @@ public static class ListLambdas<T>
         return listFiltered;
     }
 
-    public static T Fold(List<T> list, T initialValue, Func<T, T, T> lambdaExpression)
+    public static T Fold(List<T>? list, T initialValue, Func<T, T, T> lambdaExpression)
     {
         if (list == null)
         {
