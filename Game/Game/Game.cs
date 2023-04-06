@@ -20,7 +20,7 @@ public class Game
             {
                 throw new ArgumentException("empty map");
             }
-            _currentPosition = (1, 1);
+            _currentPosition = (1, 2);
         }
         catch (IOException e)
         {
@@ -39,8 +39,9 @@ public class Game
     private void MoveCharacter(Direction direction)
     {
         Console.CursorLeft = _currentPosition.x;
-        Console.CursorTop = _currentPosition.y + 1;
+        Console.CursorTop = _currentPosition.y;
         Console.Write(' ');
+        Console.CursorLeft = _currentPosition.x;
         switch (direction)
         {
             case Direction.Left:
@@ -78,14 +79,14 @@ public class Game
     
     public void OnLeft(object? sender, EventArgs args)
     {
-        if (_map[_currentPosition.y][_currentPosition.x - 1] != '*')
+        if (_map[_currentPosition.y - 1][_currentPosition.x - 1] != '*')
         {
             MoveCharacter(Direction.Left);
         }
     }
     public void OnRight(object? sender, EventArgs args)
     {
-        if (_map[_currentPosition.y][_currentPosition.x + 1] != '*')
+        if (_map[_currentPosition.y - 1][_currentPosition.x + 1] != '*')
         {
             MoveCharacter(Direction.Right);
         }
@@ -93,7 +94,7 @@ public class Game
 
     public void OnTop(object? sender, EventArgs args)
     {
-        if (_map[_currentPosition.y - 1][_currentPosition.x] != '*')
+        if (_map[_currentPosition.y - 2][_currentPosition.x] != '*')
         {
             MoveCharacter(Direction.Up);
         }
@@ -101,7 +102,7 @@ public class Game
     
     public void OnBottom(object? sender, EventArgs args)
     {
-        if (_map[_currentPosition.y + 1][_currentPosition.x] != '*')
+        if (_map[_currentPosition.y][_currentPosition.x] != '*')
         {
             MoveCharacter(Direction.Down);
         }
