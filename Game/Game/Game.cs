@@ -6,21 +6,30 @@ using System.IO;
 
 public class Game
 {
-    private (int x , int y) _currentPosition;
+    private int _currentPositionX;
+
+    private int _currentPositionY;
+
+    public int CurrentPositionX { get => _currentPositionX; set => _currentPositionX = value; }
     
+    public int CurrentPositionY { get => _currentPositionY; set => _currentPositionY = value; }
+
     private string[] _map;
 
-    public Game()
+    public Game(string mapPath)
     {
         try
         {
-            _map = File.ReadAllLines("/Users/annnikolaeff/" +
-                                        "MyFolder/HWSecondTerm/Game/Game/Map.txt");
+            _map = File.ReadAllLines(mapPath);
             if (_map.Length == 0)
             {
                 throw new ArgumentException("empty map");
             }
-            _currentPosition = (1, 2);
+
+            _currentPositionX = 1;
+            _currentPositionY = 2;
+            CurrentPositionX = _currentPositionX;
+            CurrentPositionY = _currentPositionY;
         }
         catch (IOException e)
         {
@@ -28,7 +37,7 @@ public class Game
         }
     }
 
-    private enum Direction
+    public enum Direction
     {
         Up,
         Left,
@@ -38,30 +47,30 @@ public class Game
 
     private void MoveCharacter(Direction direction)
     {
-        Console.CursorLeft = _currentPosition.x;
-        Console.CursorTop = _currentPosition.y;
+        Console.CursorLeft = _currentPositionX;
+        Console.CursorTop = _currentPositionY;
         Console.Write(' ');
-        Console.CursorLeft = _currentPosition.x;
+        Console.CursorLeft = _currentPositionX;
         switch (direction)
         {
             case Direction.Left:
-                Console.CursorLeft = _currentPosition.x - 1;
-                _currentPosition.x -= 1;
+                Console.CursorLeft = _currentPositionX - 1;
+                _currentPositionX -= 1;
                 Console.Write('@');
                 break;
             case Direction.Up:
-                Console.CursorTop = _currentPosition.y - 1;
-                _currentPosition.y -= 1;
+                Console.CursorTop = _currentPositionY - 1;
+                _currentPositionY -= 1;
                 Console.Write('@');
                 break;
             case Direction.Right:
-                Console.CursorLeft = _currentPosition.x + 1;
-                _currentPosition.x += 1;
+                Console.CursorLeft = _currentPositionX + 1;
+                _currentPositionX += 1;
                 Console.Write('@');
                 break;
             case Direction.Down:
-                Console.CursorTop = _currentPosition.y + 1;
-                _currentPosition.y += 1;
+                Console.CursorTop = _currentPositionY + 1;
+                _currentPositionY += 1;
                 Console.Write('@');
                 break;
         }
@@ -76,17 +85,51 @@ public class Game
         }
         Console.WriteLine(lines.ToString());
     }
+
+    public bool IsStepPossible(Direction direction)
+    {
+        switch (direction)
+        {
+            case Direction.Left:
+                if (_map[_currentPositionY - 1][_currentPositionX - 1] != '*')
+                {
+                    return true;
+                }
+                break;
+            case Direction.Up:
+                if (_map[_currentPositionY - 2][_currentPositionX] != '*')
+                {
+                    return true;
+                }
+                break;
+            case Direction.Right:
+                if (_map[_currentPositionY - 1][_currentPositionX + 1] != '*')
+                {
+                    return true;
+                }
+                break;
+            case Direction.Down:
+                if (_map[_currentPositionY][_currentPositionX] != '*')
+                {
+                    return true;
+                }
+                break;
+        }
+
+        return false;
+    }
     
     public void OnLeft(object? sender, EventArgs args)
     {
-        if (_map[_currentPosition.y - 1][_currentPosition.x - 1] != '*')
+        if (_map[_currentPositionY - 1][_currentPositionX - 1] != '*')
         {
             MoveCharacter(Direction.Left);
         }
     }
+    
     public void OnRight(object? sender, EventArgs args)
     {
-        if (_map[_currentPosition.y - 1][_currentPosition.x + 1] != '*')
+        if (_map[_currentPositionY - 1][_currentPositionX + 1] != '*')
         {
             MoveCharacter(Direction.Right);
         }
@@ -94,15 +137,15 @@ public class Game
 
     public void OnTop(object? sender, EventArgs args)
     {
-        if (_map[_currentPosition.y - 2][_currentPosition.x] != '*')
+        if (_map[_currentPositionY - 2][_currentPositionX] != '*')
         {
             MoveCharacter(Direction.Up);
         }
     }
-    
+
     public void OnBottom(object? sender, EventArgs args)
     {
-        if (_map[_currentPosition.y][_currentPosition.x] != '*')
+        if (_map[_currentPositionY][_currentPositionX] != '*')
         {
             MoveCharacter(Direction.Down);
         }
