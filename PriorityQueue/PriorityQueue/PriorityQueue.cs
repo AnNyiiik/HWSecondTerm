@@ -1,20 +1,18 @@
 ﻿namespace PriorityQueue;
 
-public class PriorityQueue
+public class PriorityQueue<T>
 {
-    private List<QueueElement> _queue;
-
-    private int INIT_Size;
+    private List<QueueElement<T>> _queue;
     
     /// <summary>
     /// An element of the queue which stores its value and priority.
     /// </summary>
-    private class QueueElement
+    private class QueueElement<T>
     {
-        private char _value;
+        private T _value;
         private int _priority;
 
-        public QueueElement(char value, int priority)
+        public QueueElement(T value, int priority)
         {
             _value = value;
             _priority = priority;
@@ -22,24 +20,24 @@ public class PriorityQueue
             Priority = _priority;
         }
         
-        public char Value { get; }
+        public T Value { get; }
         
         public int Priority { get; }
     }
 
     public PriorityQueue()
     {
-        _queue = new List<QueueElement>();
+        _queue = new List<QueueElement<T>>();
     }
     
     /// <summary>
     /// Add a new queue element in queue by its priority.
     /// </summary>
-    public void Enqueue(char value, int priority)
+    public void Enqueue(T value, int priority)
     {
         if (_queue.Count == 0)
         {
-            _queue.Add(new QueueElement(value, priority));
+            _queue.Add(new QueueElement<T>(value, priority));
             return;
         }
 
@@ -48,7 +46,7 @@ public class PriorityQueue
         {
             ++index;
         }
-        _queue.Insert(index,new QueueElement(value, priority));
+        _queue.Insert(index,new QueueElement<T>(value, priority));
     }
 
     /// <summary>
@@ -56,7 +54,7 @@ public class PriorityQueue
     /// </summary>
     /// <returns></returns>
     /// <exception cref="EmptyQueueException">This exception is thrown if Dequeue for an empty queue is called.</exception>
-    public char Dequeue()
+    public T Dequeue()
     {
         if (Empty())
         {
