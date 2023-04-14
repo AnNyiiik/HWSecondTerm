@@ -2,12 +2,12 @@
 
 public class PriorityQueue<T>
 {
-    private List<QueueElement<T>> _queue;
+    private List<QueueElement> _queue;
     
     /// <summary>
     /// An element of the queue which stores its value and priority.
     /// </summary>
-    private class QueueElement<T>
+    private class QueueElement
     {
         private T _value;
         private int _priority;
@@ -27,7 +27,7 @@ public class PriorityQueue<T>
 
     public PriorityQueue()
     {
-        _queue = new List<QueueElement<T>>();
+        _queue = new List<QueueElement>();
     }
     
     /// <summary>
@@ -37,7 +37,7 @@ public class PriorityQueue<T>
     {
         if (_queue.Count == 0)
         {
-            _queue.Add(new QueueElement<T>(value, priority));
+            _queue.Add(new QueueElement(value, priority));
             return;
         }
 
@@ -46,11 +46,11 @@ public class PriorityQueue<T>
         {
             ++index;
         }
-        _queue.Insert(index,new QueueElement<T>(value, priority));
+        _queue.Insert(index,new QueueElement(value, priority));
     }
 
     /// <summary>
-    /// Returns a value of an element with the biggest priority.
+    /// Returns a value of an element with the biggest priority and delete it from queue.
     /// </summary>
     /// <returns></returns>
     /// <exception cref="EmptyQueueException">This exception is thrown if Dequeue for an empty queue is called.</exception>
