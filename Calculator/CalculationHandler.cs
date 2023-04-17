@@ -28,7 +28,7 @@ public class CalculationHandler
 
     private double? acc;
 
-    public string? Acc
+    public string Acc
     {
         get
         {
@@ -55,14 +55,8 @@ public class CalculationHandler
 
     private bool isDouble;
 
-    public void CalculationProcess(object sender, EventArgs e)
+    public void CalculationProcess(string character)
     {
-        var character = (sender as Button)?.Text;
-        if (character == null)
-        {
-            MessageBox.Show("empty string");
-            return;
-        }
         switch (_currentState)
         {
             case States.ZeroDivision:
