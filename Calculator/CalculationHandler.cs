@@ -81,8 +81,8 @@ public class CalculationHandler
                     operand.Append(character);
                     isDouble = true;
 
-                } else if (character[0] == '-' || character[0] == '+' || character[0] == '/' 
-                        || character[0] == '*' || character[0] == '=')
+                } else if (character.Equals("-") || character.Equals("+") || character.Equals("/")
+                        || character.Equals("*") || character.Equals("="))
                 {
                     isDouble = false;
                     if (acc == null)
@@ -136,11 +136,19 @@ public class CalculationHandler
                     operand.Clear();
                     isDouble = false;
                     acc = null;
-                } 
+                } else if (character.Equals("+/-"))
+                {
+                    if (operand.Length != 0)
+                    {
+                        operand = operand.Insert(0, "-");
+                        break;
+                    }
+                    acc = -acc;
+                }
                 break;
 
             case States.AwaitSecondOperand:
-                if (character[0] == '-' || character[0] == '+' || character[0] == '/' || character[0] == '*')
+                if (character.Equals("-") || character.Equals("+") || character.Equals("/") || character.Equals("*"))
                 {
                     operation = character[0];
                     break;
@@ -155,6 +163,10 @@ public class CalculationHandler
                 {
                     operand.Clear();
                     acc = null;
+                }
+                if (character.Equals("+/-"))
+                {
+                    acc = 0;
                 }
                 if (character.Equals("="))
                 {

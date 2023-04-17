@@ -23,5 +23,6 @@ namespace Calculator
             }
             calculationHandler.CalculationProcess(character);
         }
+
     }
 }
