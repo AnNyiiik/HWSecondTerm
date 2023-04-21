@@ -1,3 +1,4 @@
+using System.Runtime.Versioning;
 using Calculator;
 
 namespace TestCalculator;
@@ -65,7 +66,6 @@ public class Tests
             new TestCaseData((new string[] {"2", ",", "="}, 2.0)),
             new TestCaseData((new string[] {"2", "+", "=", "6", "="}, 6.0)),
         };
-
 
     [TestCaseSource(nameof(DataCheckBasicCases))]
     public void TestBasicCases((string[] data, double correctAnswer) args)
