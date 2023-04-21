@@ -9,7 +9,7 @@ namespace Calculator;
 public class CalculationHandler
 {
     public enum States
-    { 
+    {
         AwaitSecondOperand,
         AwaitCharacter,
         ZeroDivision
@@ -35,14 +35,15 @@ public class CalculationHandler
             if (_currentState == States.ZeroDivision)
             {
                 return "Error";
-            } else if (acc == null)
+            }
+            else if (acc == null)
             {
                 if (operand.Length == 0)
                 {
                     return "0";
                 }
                 return operand.ToString();
-            } 
+            }
             if (operand.Length == 0)
             {
                 return acc.ToString();
@@ -72,7 +73,8 @@ public class CalculationHandler
                 {
                     operand.Append(character);
 
-                } else if (character[0] == ',')
+                }
+                else if (character[0] == ',')
                 {
                     if (operand.Length == 0 || isDouble)
                     {
@@ -81,7 +83,8 @@ public class CalculationHandler
                     operand.Append(character);
                     isDouble = true;
 
-                } else if (character.Equals("-") || character.Equals("+") || character.Equals("/")
+                }
+                else if (character.Equals("-") || character.Equals("+") || character.Equals("/")
                         || character.Equals("*") || character.Equals("="))
                 {
                     isDouble = false;
@@ -131,12 +134,14 @@ public class CalculationHandler
                             break;
                     }
                     operation = character[0];
-                } else if (character.Equals("C"))
+                }
+                else if (character.Equals("C"))
                 {
                     operand.Clear();
                     isDouble = false;
                     acc = null;
-                } else if (character.Equals("+/-"))
+                }
+                else if (character.Equals("+/-"))
                 {
                     if (operand.Length != 0)
                     {

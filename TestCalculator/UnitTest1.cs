@@ -52,7 +52,7 @@ public class Tests
             new TestCaseData((new string[] {"2,1", "-", "="}, 0.0)),
             new TestCaseData((new string[] {"1,1", "*", "="}, 1.21)),
             new TestCaseData((new string[] {"2,2", "/", "="}, 1.0)),
-            new TestCaseData((new string[] {"2", ",", "2", "+", "7", ",", "8", "+", "=", "*", "0", ",", "1", "/", "0", 
+            new TestCaseData((new string[] {"2", ",", "2", "+", "7", ",", "8", "+", "=", "*", "0", ",", "1", "/", "0",
                     ",", "5", "="}, 4.0)),
         };
 
