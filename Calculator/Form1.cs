@@ -21,7 +21,8 @@ namespace Calculator
                 MessageBox.Show("empty string");
                 return;
             }
-            calculationHandler.CalculationProcess(character);
+            calculationHandler.CalculationProcess(character); 
+
         }
 
     }
