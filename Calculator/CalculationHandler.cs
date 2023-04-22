@@ -29,7 +29,7 @@ public class CalculationHandler
 
     private double? acc;
 
-    public string Acc
+    public string? Acc
     {
         get
         {
