@@ -75,7 +75,7 @@ public class CalculationHandler
                     operand.Append(character);
 
                 }
-                else if (character[0] == ',')
+                else if (character[0] == ',' || character[0] == '.')
                 {
                     if (operand.Length == 0 || isDouble)
                     {
