@@ -59,8 +59,9 @@ public class Tests
     private static IEnumerable<TestCaseData> DataCheckInaccurateInputCases
         => new TestCaseData[]
         {
+            new TestCaseData((new string[] {"2", ",", ",", "+", "1", "="}, 3.0)),
+            new TestCaseData((new string[] {",", "3", "="}, 3.0)),
             
-            new TestCaseData((new string[] {"3", ",", "0", ",", "0", "="}, 3.0)),
             new TestCaseData((new string[] {"2", ",", "="}, 2.0)),
             new TestCaseData((new string[] {"2", "+", "=", "6", "="}, 6.0)),
         };
