@@ -76,8 +76,11 @@ public class Tests
             calculator.CalculationProcess(character);
         }
         var isNumber = Int32.TryParse(calculator.Acc, out var answer);
-        Assert.True(isNumber);
-        Assert.That(Math.Abs(answer - args.correctAnswer), Is.LessThan(_delta));
+        Assert.Multiple(() =>
+        {
+            Assert.That(isNumber, Is.True);
+            Assert.That(Math.Abs(answer - args.correctAnswer), Is.LessThan(_delta));
+        });
     }
 
     [TestCaseSource(nameof(DataCheckZeroCases))]
@@ -89,8 +92,11 @@ public class Tests
             calculator.CalculationProcess(character);
         }
         var isNumber = Int32.TryParse(calculator.Acc, out var answer);
-        Assert.True(isNumber);
-        Assert.That(Math.Abs(answer - args.correctAnswer), Is.LessThan(_delta));
+        Assert.Multiple(() =>
+        {
+            Assert.That(isNumber, Is.True);
+            Assert.That(Math.Abs(answer - args.correctAnswer), Is.LessThan(_delta));
+        });
     }
 
     [TestCaseSource(nameof(DataCheckZeroDivisionCases))]
@@ -101,7 +107,7 @@ public class Tests
         {
             calculator.CalculationProcess(character);
         }
-        Assert.That(args.correctAnswer.Equals(calculator.Acc));
+        Assert.That(args.correctAnswer, Is.EqualTo(calculator.Acc));
     }
 
     [TestCaseSource(nameof(DataCheckMoreComplexCases))]
@@ -114,8 +120,11 @@ public class Tests
         }
         var number = calculator.Acc;
         var isNumber = Double.TryParse(number, out var answer);
-        Assert.True(isNumber);
-        Assert.That(Math.Abs(answer - args.correctAnswer), Is.LessThan(_delta));
+        Assert.Multiple(() =>
+        {
+            Assert.That(isNumber, Is.True);
+            Assert.That(Math.Abs(answer - args.correctAnswer), Is.LessThan(_delta));
+        });
     }
 
     [TestCaseSource(nameof(DataCheckDoubleCases))]
@@ -128,8 +137,11 @@ public class Tests
         }
         var number = calculator.Acc;
         var isNumber = Double.TryParse(number, out var answer);
-        Assert.True(isNumber);
-        Assert.That(Math.Abs(answer - args.correctAnswer), Is.LessThan(_delta));
+        Assert.Multiple(() =>
+        {
+            Assert.That(isNumber, Is.True);
+            Assert.That(Math.Abs(answer - args.correctAnswer), Is.LessThan(_delta));
+        });
     }
 
     [TestCaseSource(nameof(DataCheckInaccurateInputCases))]
@@ -142,7 +154,10 @@ public class Tests
         }
         var number = calculator.Acc;
         var isNumber = Double.TryParse(number, out var answer);
-        Assert.True(isNumber);
-        Assert.That(Math.Abs(answer - args.correctAnswer), Is.LessThan(_delta));
+        Assert.Multiple(() =>
+        {
+            Assert.That(isNumber, Is.True);
+            Assert.That(Math.Abs(answer - args.correctAnswer), Is.LessThan(_delta));
+        });
     }
 }
