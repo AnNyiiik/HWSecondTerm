@@ -50,9 +50,9 @@ public class Tests
         => new TestCaseData[]
         {
             
-            new TestCaseData((new string[] {"2", ",", "1", "-", "="}, 0.0)),
-            new TestCaseData((new string[] {"2", ",", "8", "*", "2", "="}, 5.6)),
-            new TestCaseData((new string[] {"2", ",", "2", "/", "="}, 1.0)),
+            new TestCaseData((new string[] {"2", ".", "1", "-", "="}, 0.0)),
+            new TestCaseData((new string[] {"2", ".", "8", "*", "2", "="}, 5.6)),
+            new TestCaseData((new string[] {"2", ".", "2", "/", "="}, 1.0)),
             
         };
 
