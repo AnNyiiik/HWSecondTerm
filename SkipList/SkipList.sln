@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkipList", "SkipList\SkipList.csproj", "{DC0305DE-3F09-499B-9949-A313FA33DF99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSkipList", "TestSkipList\TestSkipList.csproj", "{1477F1AE-CB5F-41A5-A4B8-105769112059}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DC0305DE-3F09-499B-9949-A313FA33DF99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC0305DE-3F09-499B-9949-A313FA33DF99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC0305DE-3F09-499B-9949-A313FA33DF99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC0305DE-3F09-499B-9949-A313FA33DF99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1477F1AE-CB5F-41A5-A4B8-105769112059}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1477F1AE-CB5F-41A5-A4B8-105769112059}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1477F1AE-CB5F-41A5-A4B8-105769112059}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1477F1AE-CB5F-41A5-A4B8-105769112059}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
