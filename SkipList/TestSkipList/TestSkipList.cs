@@ -37,4 +37,15 @@ public class Tests
             Assert.That(skipList.FindValue(item), Is.EqualTo(true));
         }
     }
+
+    [TestCaseSource(nameof(ListDataFind))]
+    public void TestDelete(List<int> list)
+    {
+        var skipList = new SkipList<int>(list);
+        foreach (var item in list)
+        {
+            skipList.Delete(item);
+            Assert.That(skipList.FindValue(item), Is.EqualTo(false));
+        }
+    }
 }
