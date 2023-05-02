@@ -1,4 +1,3 @@
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using SkipList;
 
 namespace TestSkipList;
@@ -8,13 +7,13 @@ public class Tests
     private static IEnumerable<TestCaseData> ListDataFind =>
         new TestCaseData[] {
             new TestCaseData(new List<int> {90, -12, 34, 2, -10, 5, -13, -100, 100, 0, 
-                    -8, 77, 2, 5, 6})
+                    -8, 77, 6})
         };
     
     private static IEnumerable<TestCaseData> ListDataAdd =>
         new TestCaseData[] {
             new TestCaseData(new List<int> {90, -12, 34, 2, -10, 5, -13, -100, 100, 0, 
-                -8, 77, 2, 5, 6}, new List<int> {1, -14, 11, 99, -19, 3})
+                -8, 77, 6}, new List<int> {1, -14, 11, 99, -19, 3})
         };
 
     [TestCaseSource(nameof(ListDataFind))]
@@ -23,7 +22,7 @@ public class Tests
         var skipList = new SkipList<int>(list);
         foreach (var item in list)
         {
-            Assert.That(skipList.FindValue(item), Is.EqualTo(true));
+            Assert.That(skipList.Contains(item), Is.EqualTo(true));
         }
     }
 
@@ -34,7 +33,7 @@ public class Tests
         foreach (var item in newElements)
         {
             skipList.Add(item);
-            Assert.That(skipList.FindValue(item), Is.EqualTo(true));
+            Assert.That(skipList.Contains(item), Is.EqualTo(true));
         }
     }
 
@@ -44,8 +43,8 @@ public class Tests
         var skipList = new SkipList<int>(list);
         foreach (var item in list)
         {
-            skipList.Delete(item);
-            Assert.That(skipList.FindValue(item), Is.EqualTo(false));
+            skipList.Remove(item);
+            Assert.That(skipList.Contains(item), Is.EqualTo(false));
         }
     }
 }

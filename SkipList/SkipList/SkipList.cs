@@ -1,17 +1,16 @@
-﻿using System;
-using System.Data.SqlTypes;
+﻿using System.Collections;
 
 namespace SkipList;
 
-public class SkipList<T> where T : IComparable
+public class SkipList<T> : IList<T> where T : IComparable
 {
     private List<Node> _topLevel;
 
-    private List<List<Node>> _levels;
+    private readonly List<List<Node>> _levels;
 
-    private class Node
+    protected class Node
     {
-        public Node(Node? down, Node? next, T? value)
+        public Node(Node? down, Node? next, T value)
         {
             Down = down;
             Next = next;
@@ -21,7 +20,7 @@ public class SkipList<T> where T : IComparable
         
         public Node? Next { get; set; }
         
-        public T? Value { get; set; }
+        public T Value { get; set; }
     }
 
     public SkipList()
@@ -70,13 +69,22 @@ public class SkipList<T> where T : IComparable
         return newLevel;
     }
 
-    public bool FindValue(T value)
+    public void Clear()
     {
-        if (_topLevel.Count == 0)
+        foreach (var level in _levels)
+        {
+            level.Clear();
+        }
+        _levels.Clear();
+    }
+
+    public bool Contains(T value)
+    {
+        if (Count == 0)
         {
             return false;
         }
-        if (_levels[0][1].Value?.CompareTo(value) > 0 || _levels[0][_levels[0].Count - 1].Value?.CompareTo(value) < 0)
+        if (_levels[0][1].Value.CompareTo(value) > 0 || _levels[0][_levels[0].Count - 1].Value.CompareTo(value) < 0)
         {
             return false;
         }
@@ -84,20 +92,51 @@ public class SkipList<T> where T : IComparable
         return Find(_topLevel[1], _levels.Count - 1, value);
     }
 
+    public void CopyTo(T[] array, int indexOfFirstCopiedElement)
+    {
+        if (_levels.Count == 0 && indexOfFirstCopiedElement >= 0)
+        {
+            throw new ArgumentException("Incorrect index");
+        } 
+        if (_levels.Count > 0 && indexOfFirstCopiedElement >= _levels[0].Count)
+        {
+            throw new ArgumentException("Incorrect index");
+        }
+
+        var index = indexOfFirstCopiedElement + 1;
+        while (index - indexOfFirstCopiedElement - 1 < array.Length)
+        {
+            array[index - indexOfFirstCopiedElement - 1] = _levels[0][index].Value;
+            ++index;
+        }
+    }
+    
+    public int Count
+    {
+        get => _levels.Count == 0 ? 0 : _levels[0].Count - 1;
+    }
+    
+    public bool IsReadOnly
+    {
+        get => false;
+    }
+    
+    
+
     private bool Find(Node? currentNode, int currentLevel, T value)
     {
         if (currentNode == null)
         {
             return false;
         }
-        while (currentNode?.Value?.CompareTo(value) <= 0 && currentNode.Next != null)
+        while (currentNode?.Value.CompareTo(value) <= 0 && currentNode.Next != null)
         {
-            if (currentNode.Value?.CompareTo(value) == 0)
+            if (currentNode.Value.CompareTo(value) == 0)
             {
                 return true;
             }
 
-            if (currentNode.Next.Value?.CompareTo(value) > 0)
+            if (currentNode.Next.Value.CompareTo(value) > 0)
             {
                 if (currentNode.Down == null)
                 {
@@ -111,7 +150,7 @@ public class SkipList<T> where T : IComparable
 
         if (currentNode?.Down == null)
         {
-            if (currentNode?.Value?.CompareTo(value) == 0)
+            if (currentNode?.Value.CompareTo(value) == 0)
             {
                 return true;
             }
@@ -130,7 +169,7 @@ public class SkipList<T> where T : IComparable
             return;
         }
         var randomizer = new Random();
-        var newNode = InsertNode(_topLevel[0], value, _levels.Count - 1, randomizer);
+        var newNode = InsertNode(_topLevel[0], value, randomizer);
         if (newNode != null)
         {
             _topLevel = new List<Node> { newNode };
@@ -139,9 +178,9 @@ public class SkipList<T> where T : IComparable
         }
     }
 
-    private Node? InsertNode(Node currentNode, T value, int currentLevel, Random randomizer)
+    private Node? InsertNode(Node currentNode, T value, Random randomizer)
     {
-        while (currentNode.Next != null && currentNode.Next?.Value?.CompareTo(value) < 0)
+        while (currentNode.Next != null && currentNode.Next?.Value.CompareTo(value) < 0)
         {
             currentNode = currentNode.Next;
         }
@@ -150,7 +189,7 @@ public class SkipList<T> where T : IComparable
         
         if (currentNode.Down != null)
         {
-            downNode = InsertNode(currentNode.Down, value, currentLevel - 1, randomizer);
+            downNode = InsertNode(currentNode.Down, value, randomizer);
         }
 
         if (currentNode.Down == null || downNode != null)
@@ -167,37 +206,142 @@ public class SkipList<T> where T : IComparable
         return null;
     }
 
-    public void Delete(T value)
+    public bool Remove(T value)
     {
-        DeleteValue(_topLevel[0], value, _levels.Count - 1);
+        var result = DeleteValue(_topLevel[0], value, _levels.Count - 1);
         if (_topLevel.Count == 1)
         {
             _levels.Remove(_topLevel);
             _topLevel = (_levels.Count == 0) ? new List<Node> () : _levels[_levels.Count - 1];
         }
+
+        return result;
     }
 
-    private void DeleteValue(Node currentNode, T value, int currentLevel)
+    public void RemoveAt(int index)
     {
-        while (currentNode.Next != null && currentNode.Next?.Value?.CompareTo(value) < 0)
+        if (_topLevel.Count == 0 || index > _levels[0].Count - 1)
+        {
+            throw new ArgumentException("incorrect index");
+        }
+
+        Remove(_levels[0][index + 1].Value);
+    }
+
+    public int IndexOf(T value)
+    {
+        if (_levels.Count == 0)
+        {
+            return -1;
+        }
+
+        for (var i = 1; i < _levels[0].Count; ++i)
+        {
+            if (_levels[0][i].Value.CompareTo(value) == 0)
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    public T this[int index]
+    {
+        get => _levels.Count == 0 ? throw new ArgumentException("empty list") : _levels[0][index].Value;
+        set => throw new NotImplementedException();
+    }
+    
+    public IEnumerator<T> GetEnumerator()
+    {
+        var list = new List<T>();
+        if (Count == 0)
+        {
+            return new NodeEnumerator(list);
+        }
+        for(var i = 1; i < Count; ++i)
+        {
+            list.Add(_levels[0][i].Value);
+        }
+        return new NodeEnumerator(list);
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
+    public class NodeEnumerator : IEnumerator<T>
+    {
+        private List<T> _values;
+
+        public NodeEnumerator(List<T> list)
+        {
+            _values = new List<T>(list);
+        }
+
+        private int _index;
+        
+        public bool MoveNext()
+        {
+            _index++;
+            return (_index < _values.Count);
+        }
+
+        public void Reset()
+        {
+            _index = 0;
+        }
+
+        object IEnumerator.Current
+        {
+            get => Current;
+        }
+
+        public T Current
+        {
+            get
+            {
+                try
+                {
+                    return _values[_index];
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    throw new InvalidOperationException();
+                }
+            }
+        }
+
+        public void Dispose() { }
+    }
+
+    public void Insert(int index, T value)
+    {
+        throw new NotImplementedException();
+    }
+    
+    
+
+    private bool DeleteValue(Node currentNode, T value, int currentLevel)
+    {
+        while (currentNode.Next != null && currentNode.Next?.Value.CompareTo(value) < 0)
         {
             currentNode = currentNode.Next;
         }
 
         if (currentNode.Down != null)
         {
-            DeleteValue(currentNode.Down, value, currentLevel - 1);
+            return DeleteValue(currentNode.Down, value, currentLevel - 1);
         }
 
-        if (currentNode.Next != null && currentNode.Next.Value?.CompareTo(value) == 0)
+        if (currentNode.Next != null && currentNode.Next.Value.CompareTo(value) == 0)
         {
-            var nodeToDelete = currentNode.Next;
-            while (nodeToDelete != null && nodeToDelete.Value?.CompareTo(value) == 0)
-            {
-                _levels[currentLevel].Remove(nodeToDelete);
-                currentNode.Next = nodeToDelete.Next;
-                nodeToDelete = nodeToDelete.Next;
-            }
+            _levels[currentLevel].Remove(currentNode.Next);
+            currentNode.Next = currentNode.Next.Next;
+            return true;
         }
+
+        return false;
     }
 }
