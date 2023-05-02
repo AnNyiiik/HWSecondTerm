@@ -33,7 +33,7 @@ public class Tests
         foreach (var item in newElements)
         {
             skipList.Add(item);
-            Assert.That(skipList.Contains(item), Is.EqualTo(true));
+            Assert.True(skipList.Contains(item));
         }
     }
 
