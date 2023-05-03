@@ -53,6 +53,9 @@ public class SkipList<T> : IList<T> where T : IComparable
         }
     }
     
+    /// <summary>
+    /// Creates new upper-level of the given one.
+    /// </summary>
     private List<Node>? MakeNewLevel(List<Node> level)
     {
         if (level.Count <= 2)
@@ -125,7 +128,10 @@ public class SkipList<T> : IList<T> where T : IComparable
     }
     
     
-
+    /// <summary>
+    /// Finds a node with given value recursively.
+    /// </summary>
+    /// <returns>true, if it was found</returns>
     private bool Find(Node? currentNode, int currentLevel, T value)
     {
         if (currentNode == null)
@@ -182,6 +188,13 @@ public class SkipList<T> : IList<T> where T : IComparable
         }
     }
 
+    /// <summary>
+    /// Inserts new node to the skip list recursively after given node.
+    /// </summary>
+    /// <param name="currentNode">Node after which we insert a new one.</param>
+    /// <param name="value">value of the new node</param>
+    /// <param name="randomizer">to define whether we add new value to the upper level or not</param>
+    /// <returns>node, which were added to the skip list at the down level</returns>
     private Node? InsertNode(Node currentNode, T value, Random randomizer)
     {
         while (currentNode.Next != null && currentNode.Next?.Value.CompareTo(value) < 0)
@@ -225,12 +238,22 @@ public class SkipList<T> : IList<T> where T : IComparable
 
     public void RemoveAt(int index)
     {
-        if (_topLevel.Count == 0 || index > _levels[0].Count - 1)
+        if (_levels.Count == 0)
         {
-            throw new ArgumentException("incorrect index");
+            return;
         }
-
-        Remove(_levels[0][index + 1].Value);
+        for(var i = _levels.Count - 1; i >= 0; --i)
+        {
+            if (index > _levels[i].Count - 1)
+            {
+                index -= _levels[i].Count - 1;
+            }
+            else
+            {
+                _levels[i][index].Next = _levels[i][index + 1].Next;
+                _levels[i].RemoveAt(index + 1);
+            }
+        }
     }
 
     public int IndexOf(T value)
@@ -240,11 +263,17 @@ public class SkipList<T> : IList<T> where T : IComparable
             return -1;
         }
 
-        for (var i = 1; i < _levels[0].Count; ++i)
+        var index = 0;
+        for (var i = _levels.Count - 1; i >= 0; --i)
         {
-            if (_levels[0][i].Value.CompareTo(value) == 0)
+            for (var j = 1; j < _levels[i].Count; ++j)
             {
-                return i;
+                if (_levels[i][j].Value.CompareTo(value) == 0)
+                {
+                    return index;
+                }
+
+                ++index;
             }
         }
 
@@ -291,6 +320,9 @@ public class SkipList<T> : IList<T> where T : IComparable
         return GetEnumerator();
     }
 
+    /// <summary>
+    /// Enumerator for nodes in the skipList, iterates over levels from the peak to the bottom.
+    /// </summary>
     public class NodeEnumerator : IEnumerator<T>
     {
         private SkipList<T> _skipList;
@@ -365,7 +397,12 @@ public class SkipList<T> : IList<T> where T : IComparable
     }
     
     
-
+    /// <summary>
+    /// Delete given value recursively, if it exists.
+    /// </summary>
+    /// <param name="currentNode">start Node, from which we seek value</param>
+    /// <param name="value">value to delete</param>
+    /// <returns>true, if the value has been deleted</returns>
     private bool DeleteValue(Node currentNode, T value, int currentLevel)
     {
         while (currentNode.Next != null && currentNode.Next?.Value.CompareTo(value) < 0)
