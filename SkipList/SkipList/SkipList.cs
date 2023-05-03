@@ -8,6 +8,8 @@ public class SkipList<T> : IList<T> where T : IComparable
 
     private readonly List<List<Node>> _levels;
 
+    private int _state;
+
     protected class Node
     {
         public Node(Node? down, Node? next, T value)
@@ -71,6 +73,7 @@ public class SkipList<T> : IList<T> where T : IComparable
 
     public void Clear()
     {
+        ++_state;
         foreach (var level in _levels)
         {
             level.Clear();
@@ -162,6 +165,7 @@ public class SkipList<T> : IList<T> where T : IComparable
 
     public void Add(T value)
     {
+        ++_state;
         if (_topLevel.Count == 0)
         {
             _topLevel.Add(new Node(null, null, value));
@@ -208,6 +212,7 @@ public class SkipList<T> : IList<T> where T : IComparable
 
     public bool Remove(T value)
     {
+        ++_state;
         var result = DeleteValue(_topLevel[0], value, _levels.Count - 1);
         if (_topLevel.Count == 1)
         {
@@ -248,22 +253,37 @@ public class SkipList<T> : IList<T> where T : IComparable
 
     public T this[int index]
     {
-        get => _levels.Count == 0 ? throw new ArgumentException("empty list") : _levels[0][index].Value;
-        set => throw new NotImplementedException();
+        get
+        {
+            if (_levels.Count == 0)
+            {
+                throw new ArgumentException("empty list");
+            }
+            
+            for(var i = _levels.Count - 1; i >= 0; --i)
+            {
+                if (index > _levels[i].Count - 1)
+                {
+                    index -= _levels[i].Count - 1;
+                }
+                else
+                {
+                    return _levels[i][index + 1].Value;
+                }
+            }
+
+            throw new ArgumentException("index out of bounds");
+
+        }
+        set
+        {
+            throw new NotImplementedException();
+        } 
     }
-    
+
     public IEnumerator<T> GetEnumerator()
     {
-        var list = new List<T>();
-        if (Count == 0)
-        {
-            return new NodeEnumerator(list);
-        }
-        for(var i = 1; i < Count; ++i)
-        {
-            list.Add(_levels[0][i].Value);
-        }
-        return new NodeEnumerator(list);
+        return new NodeEnumerator(this);
     }
 
     IEnumerator IEnumerable.GetEnumerator()
@@ -273,19 +293,42 @@ public class SkipList<T> : IList<T> where T : IComparable
 
     public class NodeEnumerator : IEnumerator<T>
     {
-        private List<T> _values;
+        private SkipList<T> _skipList;
 
-        public NodeEnumerator(List<T> list)
+        private int _state;
+
+        public NodeEnumerator(SkipList<T> list)
         {
-            _values = new List<T>(list);
+            _skipList = list;
+            _state = list._state;
+            _indexLevel = _skipList._levels.Count - 1;
         }
+
+        private int _indexLevel;
 
         private int _index;
         
         public bool MoveNext()
         {
-            _index++;
-            return (_index < _values.Count);
+            if (_state != _skipList._state)
+            {
+                throw new InvalidOperationException();
+            }
+            if (_skipList.Count == 0)
+            {
+                return false;
+            }
+
+            if (_skipList._levels[_indexLevel].Count - 1 > _index)
+            {
+                ++_index;
+                return true;
+            }
+            
+            _index = 0;
+            --_indexLevel;
+            return _indexLevel >= 0;
+            
         }
 
         public void Reset()
@@ -304,7 +347,7 @@ public class SkipList<T> : IList<T> where T : IComparable
             {
                 try
                 {
-                    return _values[_index];
+                    return _skipList._levels[_indexLevel][_index].Value;
                 }
                 catch (IndexOutOfRangeException)
                 {

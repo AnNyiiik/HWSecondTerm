@@ -47,4 +47,25 @@ public class Tests
             Assert.That(skipList.Contains(item), Is.EqualTo(false));
         }
     }
+
+    [TestCaseSource(nameof(ListDataFind))]
+    public void TestIteratorShouldThrowInvalidOperationExceptionWhenChangeCollection(List<int> list)
+    {
+        var skipList = new SkipList<int>(list);
+        Assert.Throws<InvalidOperationException>(() =>
+        {
+            foreach (var element in skipList)
+            {
+                skipList.Remove(element);
+            }
+        });
+        
+        Assert.Throws<InvalidOperationException>(() =>
+        {
+            foreach (var element in skipList)
+            {
+                skipList.Add(element);
+            }
+        });
+    }
 }
