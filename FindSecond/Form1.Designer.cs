@@ -36,13 +36,14 @@ partial class Form1
         }
         this.Controls.Add(TableLayoutPannel);
 
-        int[] values = new int[_NumberOfRows * _NumberOfRows / 2];
-        for (var i = 0; i < _NumberOfRows; ++i)
+        var size = _NumberOfRows * _NumberOfRows;
+
+        int[] values = new int[size / 2];
+        for (var i = 0; i < size /2; ++i)
         {
             values[i] = 2;
         }
 
-        var size = _NumberOfRows * _NumberOfRows;
         int row = 0;
 
         for (var i = 0; i < size; ++i)
@@ -59,6 +60,7 @@ partial class Form1
             button.Click += ButtonOnClick;
 
             TableLayoutPannel.Controls.Add(button, i % _NumberOfRows, row);
+            button.Dock = DockStyle.Fill;
             if (i % _NumberOfRows == _NumberOfRows - 1)
             {
                 ++row;
