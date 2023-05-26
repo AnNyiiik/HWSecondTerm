@@ -18,23 +18,16 @@ public class Game
 
     public Game(string mapPath)
     {
-        try
+        _map = File.ReadAllLines(mapPath);
+        if (_map.Length == 0)
         {
-            _map = File.ReadAllLines(mapPath);
-            if (_map.Length == 0)
-            {
-                throw new ArgumentException("empty map");
-            }
+            throw new ArgumentException("empty map");
+        }
 
-            _currentPositionX = 1;
-            _currentPositionY = 2;
-            CurrentPositionX = _currentPositionX;
-            CurrentPositionY = _currentPositionY;
-        }
-        catch (IOException e)
-        {
-            throw new IOException();
-        }
+        _currentPositionX = 1;
+        _currentPositionY = 2;
+        CurrentPositionX = _currentPositionX;
+        CurrentPositionY = _currentPositionY;
     }
 
     public enum Direction
@@ -151,3 +144,11 @@ public class Game
         }
     }
 }
+
+// вынести в отдельный класс логику построения карты
+// auto implemented properties
+// нельзя публичный сеттер
+// переименовать тестовые классы и файлы
+// добавить комментарии
+// убрать магические константы из тестов
+// проверить карту на корректность
