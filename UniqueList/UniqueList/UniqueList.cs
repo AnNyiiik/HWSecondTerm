@@ -38,5 +38,4 @@ public class UniqueList<T> : MyList<T> where T : IComparable<T>
         values.Remove(oldValue);
         values.Add(value, true);
     }
-
 }
