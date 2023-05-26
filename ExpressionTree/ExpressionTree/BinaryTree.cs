@@ -129,11 +129,12 @@ public class BinaryExpressionTree
                 result.Append(')');
             }
         } else {
-            if (isFirst) {
-                rootOperand?.PrintOperand(ref result);
+            if (isFirst)
+            {
+                result.Append(rootOperand?.PrintOperand());
                 result.Append(' ');
             } else {
-                rootOperand?.PrintOperand(ref result);
+                result.Append(rootOperand?.PrintOperand());
             }
         }
     }

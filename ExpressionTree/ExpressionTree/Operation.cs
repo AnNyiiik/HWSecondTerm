@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace ExpressionTree;
+﻿namespace ExpressionTree;
 
 public class Operation
 {
@@ -12,36 +10,33 @@ public class Operation
         Divide
     }
 
-    private string? value;
-
-    public string? Value
-    {
-        get => value;
-        set => this.value = value;
-    }
+    private Operand left;
+    private Operand right;
+    public string Value { get; }
 
     private Operations operation;
 
-    public Operation(Operations operation)
+    public Operation(Operations operation, Operand right, Operand left)
     {
         this.operation = operation;
+        this.left = left;
+        this.right = right;
         switch (operation)
         {
             case Operations.Add:
-                value = "+";
+                Value = "+";
                 break;
             case Operations.Subtract:
-                value = "-";
+                Value = "-";
                 break;
             case Operations.Multiply:
-                value = "*";
+                Value = "*";
                 break;
             case Operations.Divide:
-                value = "/";
+                Value = "/";
                 break;
             default:
-                value = null;
-                break;
+                throw new ArgumentException();
         }
     }
 
@@ -62,11 +57,11 @@ public class Operation
                 return Operations.Divide;
             
             default:
-                return null;
+                throw new ArgumentException();
         }
     }
 
-    public Operand? DoOperation(Operand first, Operand second)
+    public Operand DoOperation(Operand first, Operand second)
     {
         switch (operation)
         {
@@ -79,16 +74,23 @@ public class Operation
             case Operations.Divide:
                 if (Math.Abs(second.Value) < 0.0000001)
                 {
-                    throw new ArgumentException();
+                    throw new DivideByZeroException();
                 } 
                 return new Operand(first.Value / second.Value); 
             default:
-                return null;
+                throw new ArgumentException();
         }
     }
 
-    public void PrintOperation(ref StringBuilder buffer)
+    public string PrintOperation()
     {
-        buffer.Append(value);
+        var value = operation switch
+        {
+            Operations.Add => "+",
+            Operations.Subtract => "-",
+            Operations.Multiply => "*",
+            Operations.Divide => "/",
+        };
+        return value;
     }
 }

@@ -1,24 +1,16 @@
-using System.Text;
-
 namespace ExpressionTree;
 
 public class Operand
-{
-    private double value;
-
+{ 
     public Operand(double value)
     {
-        this.value = value;
+        Value = value;
     }
 
-    public double Value
-    {
-        set => this.value = value;
-        get => value;
-    }
+    public double Value { get; }
 
-    public void PrintOperand(ref StringBuilder buffer)
+    public string PrintOperand()
     {
-        buffer.Append(value);
+        return Value.ToString();
     }
 }
