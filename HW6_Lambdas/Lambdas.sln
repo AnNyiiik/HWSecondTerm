@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lambdas", "Lambdas\Lambdas.csproj", "{64A1BB1D-01F2-42BA-9A0F-7D8640CBEAA3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestListLambdaFunctions", "TestListLambdaFunctions\TestListLambdaFunctions.csproj", "{454C30BE-D5F9-4397-B228-71D78B85CCAC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{64A1BB1D-01F2-42BA-9A0F-7D8640CBEAA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64A1BB1D-01F2-42BA-9A0F-7D8640CBEAA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64A1BB1D-01F2-42BA-9A0F-7D8640CBEAA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64A1BB1D-01F2-42BA-9A0F-7D8640CBEAA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{454C30BE-D5F9-4397-B228-71D78B85CCAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{454C30BE-D5F9-4397-B228-71D78B85CCAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{454C30BE-D5F9-4397-B228-71D78B85CCAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{454C30BE-D5F9-4397-B228-71D78B85CCAC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
