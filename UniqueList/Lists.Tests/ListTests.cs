@@ -53,13 +53,13 @@ public class Tests
         Assert.Throws<DeleteOrChangeNonExistingElementException>(() => list.Change(0, 9));
     }
 
-    private static IEnumerable<TestCaseData> uniqueList
+    private static IEnumerable<TestCaseData> UniqueList
         => new TestCaseData[]
         {
             new TestCaseData(new UniqueList<int>())
         };
     
-    [TestCaseSource(nameof(uniqueList))]
+    [TestCaseSource(nameof(UniqueList))]
     public void UniqueListShouldThrowExceptionWhenAddExistingElement(UniqueList<int> list)
     {
         list.Add(1, 0);

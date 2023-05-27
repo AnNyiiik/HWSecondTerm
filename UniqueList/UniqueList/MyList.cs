@@ -7,28 +7,16 @@ public class MyList<T> where T : IComparable<T>
     {
         public ListElement(T value)
         {
-            this._value = value;
-            Next = _next;
+            Value = value;
         }
-        private T _value;
-
-        public T Value
-        {
-            get => _value;
-            set => this._value = value;
-        }
-
-        private ListElement? _next;
-
+        
+        public T Value { get; set; }
         public ListElement? Next { get; set; }
     }
 
     private ListElement? _head;
-
-    private int _size;
-
-    public int Size { get; set; }
-
+    
+    public int Size { get; private set; }
     /// <summary>
     /// Add a new element to the list by position and define its value. If the position is out of the range throws
     /// ArgumentException.
@@ -38,14 +26,14 @@ public class MyList<T> where T : IComparable<T>
     /// <exception cref="ArgumentException"></exception>
     public void Add(T value, int position)
     {
-        if (position > _size && position != 0 || position < 0)
+        if (position > Size || position < 0)
         {
             throw new ArgumentException();
         }
         if (_head == null)
         {
             _head = new ListElement(value);
-            ++_size;
+            ++Size;
             return;
         }
 
@@ -60,7 +48,7 @@ public class MyList<T> where T : IComparable<T>
         {
             element.Next = newElement;
         }
-        ++_size;
+        ++Size;
     }
 
     /// <summary>
@@ -72,9 +60,14 @@ public class MyList<T> where T : IComparable<T>
     /// <exception cref="DeleteOrChangeNonExistingElementException"></exception>
     public T Delete(int position)
     {
-        if (position >= _size || position < 0)
+        if (position >= Size || position < 0)
         {
             throw new DeleteOrChangeNonExistingElementException();
+        }
+
+        if (_head == null)
+        {
+            throw new InvalidOperationException();
         }
 
         T value;
@@ -83,7 +76,7 @@ public class MyList<T> where T : IComparable<T>
         {
             value = _head.Value;
             _head = _head.Next;
-            --_size;
+            --Size;
             return value;
         }
         var element = _head;
@@ -91,10 +84,13 @@ public class MyList<T> where T : IComparable<T>
         {
             element = element?.Next;
         }
-        
+        if (element == null || element.Next == null)
+        {
+            throw new IndexOutOfRangeException();
+        }
         value = element.Next.Value;
         element.Next = element.Next?.Next ?? null;
-        --_size;
+        --Size;
         return value;
     }
 
@@ -108,7 +104,11 @@ public class MyList<T> where T : IComparable<T>
     /// <exception cref="DeleteOrChangeNonExistingElementException"></exception>
     public T Change(T value, int position)
     {
-        if (position >= _size || position < 0)
+        if (value == null)
+        {
+            throw new NullReferenceException();
+        }
+        if (position >= Size || position < 0)
         {
             throw new DeleteOrChangeNonExistingElementException();
         }
@@ -117,19 +117,27 @@ public class MyList<T> where T : IComparable<T>
         {
             element = element?.Next;
         }
-        T oldValue = element.Value;
+        if (element == null)
+        {
+            throw new IndexOutOfRangeException();
+        }
+        var oldValue = element.Value;
         element.Value = value;
         return oldValue;
     }
-    
+
     /// <summary>
     /// Return a first position of the given value in the list. If there is no element with given value return -1.
     /// </summary>
     /// <param name="value"></param>
     /// <returns></returns>
 
-    public int GetFirstCoincide(T value)
+    protected int GetFirstCoincide(T value)
     {
+        if (value == null)
+        {
+            throw new NullReferenceException();
+        }
         var element = _head;
         var position = 0;
         while (element != null)
@@ -154,16 +162,20 @@ public class MyList<T> where T : IComparable<T>
     /// <exception cref="ArgumentException"></exception>
     public T GetValueByPosition(int position)
     {
-        if (position >= _size || position < 0)
+        if (position >= Size || position < 0)
         {
-            throw new ArgumentException();
+            throw new IndexOutOfRangeException();
         }
         var element = _head;
         for (var i = 0; i < position; ++i)
         {
             element = element?.Next;
         }
-        
+
+        if (element == null)
+        {
+            throw new IndexOutOfRangeException();
+        }
         return element.Value;
     }
 }

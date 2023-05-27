@@ -2,9 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniqueList", "UniqueList\UniqueList.csproj", "{B9FF608D-F7DC-4130-83A6-E7D3DA7A872F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniqueListApplication", "UniqueListApplication\UniqueListApplication.csproj", "{61D35DB6-6DF4-4A11-8621-846AD06FD435}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestUniqueList", "TestUniqueList\TestUniqueList.csproj", "{B68A47A0-7373-4960-8AF4-7F7CD5101E5A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lists.Tests", "Lists.Tests\Lists.Tests.csproj", "{B68A47A0-7373-4960-8AF4-7F7CD5101E5A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,10 +14,6 @@ Global
 		{B9FF608D-F7DC-4130-83A6-E7D3DA7A872F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9FF608D-F7DC-4130-83A6-E7D3DA7A872F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9FF608D-F7DC-4130-83A6-E7D3DA7A872F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{61D35DB6-6DF4-4A11-8621-846AD06FD435}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{61D35DB6-6DF4-4A11-8621-846AD06FD435}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{61D35DB6-6DF4-4A11-8621-846AD06FD435}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{61D35DB6-6DF4-4A11-8621-846AD06FD435}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B68A47A0-7373-4960-8AF4-7F7CD5101E5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B68A47A0-7373-4960-8AF4-7F7CD5101E5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B68A47A0-7373-4960-8AF4-7F7CD5101E5A}.Release|Any CPU.ActiveCfg = Release|Any CPU

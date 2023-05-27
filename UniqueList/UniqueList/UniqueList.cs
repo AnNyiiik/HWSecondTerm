@@ -1,41 +1,31 @@
-using System.Collections.Specialized;
-
 namespace UniqueList;
 
 public class UniqueList<T> : MyList<T> where T : IComparable<T>
 {
-    private Dictionary<T, bool> values;
-
-    public UniqueList()
+    new public void Add(T value, int position)
     {
-        values = new Dictionary<T, bool>();
-    }
-
-    public void Add(T value, int position)
-    {
-        if (values.ContainsKey(value))
+        if (GetFirstCoincide(value) != -1)
         {
             throw new AddExistingElementToUniqueListException();
         }
         
         base.Add(value, position); 
-        values.Add(value, true);
+        
     }
 
-    public void Delete(int position)
+    new public void Delete(int position)
     {
-        var value = base.Delete(position);
-        values.Remove(value);
+        base.Delete(position);
     }
 
-    public void Change(T value, int position)
+    new public void Change(T value, int position)
     {
-        if (values.ContainsKey(value) && GetFirstCoincide(value) != position)
+        var index = GetFirstCoincide(value);
+        if (index != -1 && index != position)
         {
             throw new AddExistingElementToUniqueListException();
         }
-        var oldValue = base.Change(value, position);
-        values.Remove(oldValue);
-        values.Add(value, true);
+
+        base.Change(value, position);
     }
 }
