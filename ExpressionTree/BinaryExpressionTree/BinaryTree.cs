@@ -2,17 +2,47 @@ using System.Text;
 
 namespace ExpressionTree;
 
-public class BinaryExpressionTree 
+public class BinaryExpressionTree
 {
-    private readonly Operation? rootOperation;
+    private readonly INode _root; 
 
-    private readonly Operand? rootOperand;
+    private readonly BinaryExpressionTree? _leftTree;
 
-    private readonly BinaryExpressionTree? leftTree;
+    private readonly BinaryExpressionTree? _rightTree;
+    
+    private const int BracketPosition = 0;
 
-    private readonly BinaryExpressionTree? rightTree;
+    private const int OperationPosition = 1;
+    
+    private const int SpacePosition = 2;
 
-    public BinaryExpressionTree (string? expression)
+    private const int FirstOperandStartPosition = 3;
+
+    private bool IsCorrectBracketBalance(string expression)
+    {
+        var count = 0;
+        foreach (var character in expression)
+        {
+            if (character == ')')
+            {
+                --count;
+            }
+
+            if (character == '(')
+            {
+                ++count;
+            }
+
+            if (count < 0)
+            {
+                return false;
+            }
+        }
+
+        return count == 0;
+    }
+    
+    public BinaryExpressionTree(string expression)
     {
         if (expression == null)
         {
@@ -22,27 +52,40 @@ public class BinaryExpressionTree
         {
             throw new ArgumentException("operand is zero-length");
         }
-        
-        if (expression[0] != '(')
+
+        if (!IsCorrectBracketBalance(expression))
+        {
+            throw new ArgumentException("incorrect sequence");
+        }
+        if (expression[BracketPosition] != '(')
         {
             var isNumber = Int32.TryParse(expression, out var value);
             if (isNumber)
             {
-                rootOperand = new Operand(value);
+                _root = new Operand(value);
             }
             else
             {
                 throw new ArgumentException("a subsequence which should be an operand is not a number");
             }
         }
-        else if (expression[0] == '(')
+        else if (expression[BracketPosition] == '(')
         {
             var operands = ParseOperands(expression);
-            if (operands.Item1 != null)
+            _root = operands.Item1 switch
             {
-                rootOperation = new Operation((Operation.Operations) operands.Item1);
-                leftTree = new BinaryExpressionTree(operands.Item2);
-                rightTree = new BinaryExpressionTree(operands.Item3);
+                '+' => new Addition(),
+                '-' => new Subtraction(),
+                '*' => new Multiplication(),
+                '/' => new Division(),
+                _ => throw new ArgumentException("incorrect expression")
+            };
+            _leftTree = new BinaryExpressionTree(operands.Item2);
+            _rightTree = new BinaryExpressionTree(operands.Item3);
+            if (_root is Operation)
+            {
+                ((Operation)_root).Left = _leftTree._root;
+                ((Operation)_root).Right = _rightTree._root;
             }
         }
         else
@@ -58,7 +101,7 @@ public class BinaryExpressionTree
             throw new ArgumentException("incorrect expression");
         }
 
-        if (expression[2] != ' ')
+        if (expression[SpacePosition] != ' ')
         {
             throw new ArgumentException("incorrect expression");
         }
@@ -97,14 +140,14 @@ public class BinaryExpressionTree
         return operand.ToString();
     }
 
-    private Tuple<Operation.Operations?, string, string> ParseOperands(string expression)
+    private (char operation, string operandLeft, string operandRight) ParseOperands(string expression)
     {
-        var operationType = Operation.GetOperationType(expression[1]);
-        if (operationType == null)
+        var operation = expression[OperationPosition];
+        if (operation != '+' && operation != '-' && operation != '/' && operation != '*')
         {
             throw new ArgumentException("incorrect expression");
         }
-        var index = 3;
+        var index = FirstOperandStartPosition;
         var left = ParseOperand(expression, ref index);
         ++index;
         var right = ParseOperand(expression, ref index);
@@ -112,51 +155,34 @@ public class BinaryExpressionTree
         {
             throw new ArgumentException("incorrect expression");
         }
-        return new Tuple<Operation.Operations?, string, string>(operationType, left, right);
+        return (operation, left, right);
     }
 
+    public double CountExpression()
+    {
+        return _root.Count();
+    }
+    
     public void PrintExpression(bool isFirst, ref StringBuilder result)
     {
-        if (leftTree != null && rightTree != null) {
+        if (_leftTree != null && _rightTree != null) {
             result.Append('(');
-            rootOperation?.PrintOperation(ref result);
+            result.Append(_root.Print());
             result.Append(' ');
-            leftTree.PrintExpression(true, ref result);
-            rightTree.PrintExpression(false, ref result);
+            _leftTree.PrintExpression(true, ref result);
+            _rightTree.PrintExpression(false, ref result);
             if (isFirst) {
                 result.Append(") ");
             } else {
                 result.Append(')');
             }
         } else {
-            if (isFirst)
-            {
-                result.Append(rootOperand?.PrintOperand());
+            if (isFirst) {
+                result.Append(_root.Print());
                 result.Append(' ');
             } else {
-                result.Append(rootOperand?.PrintOperand());
+                result.Append(_root.Print());
             }
         }
     }
-
-    private Operand? CountExpression()
-    {
-        if (rootOperation == null) {
-            return rootOperand;
-        }
-        var operandFirst = leftTree?.CountExpression();
-        var operandSecond = rightTree?.CountExpression();
-        if (operandFirst != null && operandSecond != null)
-        {
-            return rootOperation.DoOperation(operandFirst, operandSecond);
-        }
-        
-        throw new ArgumentNullException();
-    }
-
-    public double? Count()
-    {
-        return CountExpression()?.Value;
-    }
-
 }

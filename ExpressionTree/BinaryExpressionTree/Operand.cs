@@ -1,6 +1,6 @@
 namespace ExpressionTree;
 
-public class Operand
+public class Operand : INode
 { 
     public Operand(double value)
     {
@@ -9,8 +9,11 @@ public class Operand
 
     public double Value { get; }
 
-    public string PrintOperand()
+    public string Print()
     {
+        Console.Write(" {0} ", Value);
         return Value.ToString();
     }
+
+    public double Count() => Value;
 }

@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressionTree", "ExpressionTree\ExpressionTree.csproj", "{873E211E-97BC-4880-8203-81FFC0422229}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinaryExpressionTree", "BinaryExpressionTree\BinaryExpressionTree.csproj", "{873E211E-97BC-4880-8203-81FFC0422229}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTree", "TestTree\TestTree.csproj", "{F0A11A71-1BF4-40CA-934B-C7444B7751AA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinaryExpressionTree.Tests", "BinaryExpressionTree.Tests\BinaryExpressionTree.Tests.csproj", "{F0A11A71-1BF4-40CA-934B-C7444B7751AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

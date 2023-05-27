@@ -7,6 +7,7 @@
 
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
+        <RootNamespace>TestTree</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -18,7 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ExpressionTree\ExpressionTree.csproj" />
+      <ProjectReference Include="..\BinaryExpressionTree\BinaryExpressionTree.csproj" />
     </ItemGroup>
 
 </Project>
