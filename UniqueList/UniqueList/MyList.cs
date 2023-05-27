@@ -6,7 +6,6 @@
 /// <typeparam name="T">T is IComparable</typeparam>
 public class MyList<T> where T : IComparable<T>
 {
-    
     private class ListElement
     {
         public ListElement(T value)
@@ -63,7 +62,7 @@ public class MyList<T> where T : IComparable<T>
     /// DeleteOrChangeNonExistingElementException.
     /// </summary>
     /// <param name="position"></param>
-    /// <returns></returns>
+    /// <returns>The value of deleted element</returns>
     /// <exception cref="DeleteOrChangeNonExistingElementException"></exception>
     public virtual T Delete(int position)
     {
@@ -107,7 +106,6 @@ public class MyList<T> where T : IComparable<T>
     /// </summary>
     /// <param name="value"></param>
     /// <param name="position"></param>
-    /// <returns></returns>
     /// <exception cref="DeleteOrChangeNonExistingElementException"></exception>
     public virtual void Change(T value, int position)
     {
@@ -135,7 +133,8 @@ public class MyList<T> where T : IComparable<T>
     /// Return a first position of the given value in the list. If there is no element with given value return -1.
     /// </summary>
     /// <param name="value"></param>
-    /// <returns></returns>
+    /// <returns>First position on given value if it exists, else throws ArgumentException</returns>
+    /// /// <exception cref="ArgumentException"></exception>
     protected int GetFirstCoincide(T value)
     {
         if (value == null)

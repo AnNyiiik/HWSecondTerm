@@ -11,11 +11,15 @@ public class UniqueList<T> : MyList<T> where T : IComparable<T>
     /// an attempt to add an existing value.</exception>
     public override void Add(T value, int position)
     {
-        if (GetFirstCoincide(value) != -1)
+        try
         {
+            GetFirstCoincide(value);
             throw new AddExistingElementToUniqueListException();
         }
-        base.Add(value, position);
+        catch (ArgumentException)
+        {
+            base.Add(value, position);
+        }
     }
 
     /// <summary>
@@ -38,11 +42,18 @@ public class UniqueList<T> : MyList<T> where T : IComparable<T>
     /// to add an existing value</exception>
     public override void Change(T value, int position)
     {
-        var index = GetFirstCoincide(value);
-        if (index != -1 && index != position)
+        try
         {
-            throw new AddExistingElementToUniqueListException();
+            var index = GetFirstCoincide(value);
+            if (index != -1 && index != position)
+            {
+                throw new AddExistingElementToUniqueListException();
+            }
+            base.Change(value, position);
         }
-        base.Change(value, position);
+        catch(ArgumentException)
+        {
+            base.Change(value, position);
+        }
     }
 }
