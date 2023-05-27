@@ -12,14 +12,14 @@ public class Tests
         };
 
     [TestCaseSource(nameof(Lists))]
-    public void ListSholdNotBeEmptyAfterAdd(MyList<int> list)
+    public void ListShouldNotBeEmptyAfterAddTest(MyList<int> list)
     {
         list.Add(1, 0);
         Assert.That(list.Size, Is.EqualTo(1));
     }
 
     [TestCaseSource(nameof(Lists))]
-    public void ListSizeSholdBeLessAfterDeleteAndReturnCorrectValue(MyList<int> list)
+    public void ListSizeShouldBeLessAfterDeleteAndReturnCorrectValueTest(MyList<int> list)
     {
         list.Add(1, 0);
         var value = list.Delete(0);
@@ -28,7 +28,7 @@ public class Tests
     }
     
     [TestCaseSource(nameof(Lists))]
-    public void ListSholdChangeTheValueOfElementAfterChange(MyList<int> list)
+    public void ListShouldChangeTheValueOfElementAfterChangeTest(MyList<int> list)
     {
         for (var i = 0; i < 5; ++i)
         {
@@ -41,13 +41,13 @@ public class Tests
     }
 
     [TestCaseSource(nameof(Lists))]
-    public void ListShouldThrowArgumentExceptionAfterAddingByTheWrongPosition(MyList<int> list)
+    public void ListShouldThrowArgumentExceptionAfterAddingByTheWrongPositionTest(MyList<int> list)
     {
         Assert.Throws<ArgumentException>(() => list.Add(0, 4));
     }
     
     [TestCaseSource(nameof(Lists))]
-    public void ListShouldThrowNonExistingElementExceptionAfterDeletingOrChangingByTheWrongPosition(MyList<int> list)
+    public void ListShouldThrowNonExistingElementExceptionAfterDeletingOrChangingByTheWrongPositionTest(MyList<int> list)
     {
         Assert.Throws<DeleteOrChangeNonExistingElementException>(() => list.Delete(0));
         Assert.Throws<DeleteOrChangeNonExistingElementException>(() => list.Change(0, 9));
@@ -60,7 +60,7 @@ public class Tests
         };
     
     [TestCaseSource(nameof(UniqueList))]
-    public void UniqueListShouldThrowExceptionWhenAddExistingElement(UniqueList<int> list)
+    public void UniqueListShouldThrowExceptionWhenAddExistingElementTest(UniqueList<int> list)
     {
         list.Add(1, 0);
         Assert.Throws<AddExistingElementToUniqueListException>(() => list.Add(1, 0));
