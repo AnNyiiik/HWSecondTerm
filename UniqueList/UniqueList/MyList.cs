@@ -1,5 +1,9 @@
 ﻿namespace UniqueList;
 
+/// <summary>
+/// Generic list, where type is comparable.
+/// </summary>
+/// <typeparam name="T">T is IComparable</typeparam>
 public class MyList<T> where T : IComparable<T>
 {
     
@@ -16,6 +20,9 @@ public class MyList<T> where T : IComparable<T>
 
     private ListElement? _head;
     
+    /// <summary>
+    /// Return the current size of the list.
+    /// </summary>
     public int Size { get; private set; }
     /// <summary>
     /// Add a new element to the list by position and define its value. If the position is out of the range throws
@@ -24,7 +31,7 @@ public class MyList<T> where T : IComparable<T>
     /// <param name="value"></param>
     /// <param name="position"></param>
     /// <exception cref="ArgumentException"></exception>
-    public void Add(T value, int position)
+    public virtual void Add(T value, int position)
     {
         if (position > Size || position < 0)
         {
@@ -58,7 +65,7 @@ public class MyList<T> where T : IComparable<T>
     /// <param name="position"></param>
     /// <returns></returns>
     /// <exception cref="DeleteOrChangeNonExistingElementException"></exception>
-    public T Delete(int position)
+    public virtual T Delete(int position)
     {
         if (position >= Size || position < 0)
         {
@@ -102,7 +109,7 @@ public class MyList<T> where T : IComparable<T>
     /// <param name="position"></param>
     /// <returns></returns>
     /// <exception cref="DeleteOrChangeNonExistingElementException"></exception>
-    public T Change(T value, int position)
+    public virtual void Change(T value, int position)
     {
         if (value == null)
         {
@@ -121,9 +128,7 @@ public class MyList<T> where T : IComparable<T>
         {
             throw new IndexOutOfRangeException();
         }
-        var oldValue = element.Value;
         element.Value = value;
-        return oldValue;
     }
 
     /// <summary>
@@ -131,12 +136,11 @@ public class MyList<T> where T : IComparable<T>
     /// </summary>
     /// <param name="value"></param>
     /// <returns></returns>
-
     protected int GetFirstCoincide(T value)
     {
         if (value == null)
         {
-            throw new NullReferenceException();
+            throw new ArgumentNullException("null value");
         }
         var element = _head;
         var position = 0;
@@ -151,7 +155,7 @@ public class MyList<T> where T : IComparable<T>
             element = element.Next;
         }
 
-        return -1;
+        throw new ArgumentException("There is not such a value");
     }
 
     /// <summary>
