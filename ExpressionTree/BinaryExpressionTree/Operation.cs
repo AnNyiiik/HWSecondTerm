@@ -2,15 +2,24 @@
 
 public abstract class Operation : INode
 {
-    public INode? Left { get; set; }
-    public INode? Right { get; set; }
+    public INode Left { get; }
+    public INode Right { get; }
+
+    public Operation(INode left, INode right)
+    {
+        Left = left;
+        Right = right;
+    }
 
     public virtual string Print()
     {
-        Left?.Print();
-        Right?.Print();
+        PrintOperation();
+        Left.Print();
+        Right.Print();
         return String.Empty;
     }
+
+    protected abstract void PrintOperation();
 
     public abstract double Count();
 }

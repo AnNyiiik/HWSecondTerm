@@ -54,10 +54,11 @@ public class Tests
     public void TestPrint()
     {
         var expressions = File.ReadAllLines("../../../../BinaryExpressionTree.Tests/TestTruth.txt");
+        var result = new StringBuilder();
         foreach (var expression in expressions)
         {
             var tree = new BinaryExpressionTree(expression);
-            var result = new StringBuilder();
+            result.Clear();
             tree.PrintExpression(false, ref result);
             Assert.That(String.Compare(result.ToString(), expression), Is.EqualTo(0));
         }

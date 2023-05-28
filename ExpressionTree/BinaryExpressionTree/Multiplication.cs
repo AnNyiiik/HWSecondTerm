@@ -2,6 +2,10 @@ namespace ExpressionTree;
 
 public class Multiplication : Operation
 {
+    public Multiplication(INode left, INode right) : base(left, right)
+    {
+        
+    }
     public override double Count()
     {
         if (Left == null || Right == null)
@@ -12,10 +16,14 @@ public class Multiplication : Operation
         return Left.Count() * Right.Count();
     }
 
+    protected override void PrintOperation()
+    {
+        Console.Write("* ");
+    }
+
     public override string Print()
     {
         Console.Write("(");
-        Console.Write("* ");
         base.Print();
         Console.Write(") ");
         return "*";
